@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/doors.rb'
+
+cli = Doors::CLI.new
+cli.parse!(ARGV)
+
+require 'pry' ; binding.pry
+
