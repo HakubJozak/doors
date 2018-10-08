@@ -3,6 +3,8 @@ class Doors::Parser
   include Doors::TimeOps
 
   def load!(path)
+    return unless File.exist?(path)
+
     years = YAML.load_file(path)
     result = []
 
@@ -37,5 +39,5 @@ class Doors::Parser
       fail "Invalid month" if month < 1 || month > 12
       month
     end
-  
+
 end

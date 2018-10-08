@@ -13,7 +13,9 @@ class Doors::Entry
     @duration.nil? && @out.nil?
   end
 
-
+  def date
+    Date.new(*@date)
+  end
 
   private
 
@@ -21,6 +23,7 @@ class Doors::Entry
       @in = create_time( info['in'] )
       @out = create_time( info['out'] )
       @duration = create_duration( info['duration'] )
+      
 
       if @in && @out && @duration.nil?
         @duration = Doors::Duration.new(total: (@out - @in).floor)
@@ -39,6 +42,6 @@ class Doors::Entry
       Time.new *[ @date, time].flatten
     end
 
-    
+
 
 end

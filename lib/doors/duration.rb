@@ -7,7 +7,15 @@ class Doors::Duration
       @seconds = total
     end
 
-    fail ArgumentError.new("Zero duration") if @seconds.zero?
+    # fail ArgumentError.new("Zero duration") if @seconds.zero?
+  end
+
+  def +(other)
+    self.class.new(total: self.to_i + other.to_i)
+  end
+
+  def coerce(other)
+    [ self.class.new(total: other), self ]
   end
 
   def hours
@@ -27,7 +35,7 @@ class Doors::Duration
   end
 
   def to_s
-    "%02d:%02d:%02d" % 
+    "%02d:%02d:%02d" %
       [ hours, minutes, secs ]
   end
 

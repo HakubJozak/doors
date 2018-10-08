@@ -11,7 +11,7 @@ class Doors::Tracker
   def initialize
     ensure_dir_exists!
     parser = Doors::Parser.new
-    @entries = parser.load!(path)
+    @entries = parser.load!(path) || []
   end
 
   def start!
@@ -36,7 +36,7 @@ class Doors::Tracker
     # 
     def path(d = Date.today)
       month = d.strftime('%B').downcase
-      "#{dir}/#{month}_#{d.year}.yml"
+      "#{dir}/#{d.year}_#{month}.yml"
     end
 
     def dir
