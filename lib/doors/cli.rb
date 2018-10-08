@@ -21,7 +21,7 @@ class Doors::CLI
       end
 
       @tracker.entries.each do |e|
-        puts "%s\t%s\t%s", e.in, e.out, e.duration
+        puts "%26s   %26s  %26s" % [ e.in || '-', e.out || '-', e.duration ]
       end
     end
   end

@@ -6,7 +6,7 @@ class Doors::Duration
     else
       @seconds = total
     end
-      
+
     fail ArgumentError.new("Zero duration") if @seconds.zero?
   end
 
@@ -24,6 +24,11 @@ class Doors::Duration
 
   def to_i
     @seconds
+  end
+
+  def to_s
+    "%02d:%02d:%02d" % 
+      [ hours, minutes, secs ]
   end
 
 end

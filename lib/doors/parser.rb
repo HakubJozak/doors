@@ -16,8 +16,7 @@ class Doors::Parser
           entries.map do |e|
             result << case e
                       when Integer, Float
-                        d = Duration.new(time_to_array(e))
-                        Doors::Entry.new(date, duration: d)
+                        Doors::Entry.new(date, 'duration' => e)
                       else
                         Doors::Entry.new(date, e)
                       end
@@ -25,6 +24,8 @@ class Doors::Parser
         end
       end
     end
+
+    result
   end
 
   private

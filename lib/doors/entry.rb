@@ -2,6 +2,8 @@ class Doors::Entry
 
   include Doors::TimeOps
 
+  attr_reader :in, :out, :duration
+
   def initialize(date, info)
     @date = date
     set_times(info)
@@ -11,6 +13,8 @@ class Doors::Entry
     @duration.nil? && @out.nil?
   end
 
+
+
   private
 
     def set_times(info)
@@ -19,18 +23,20 @@ class Doors::Entry
       @duration = create_duration( info['duration'] )
 
       if @in && @out && @duration.nil?
-        @duration = Duration.new(secs: (@out - @in).floor)
+        @duration = Doors::Duration.new(total: (@out - @in).floor)
       end
     end
 
     def create_duration(val)
+      return if val.nil?
       time = time_to_array(val)
       Doors::Duration.new(*time)
     end
 
     def create_time(val)
+      return if val.nil?
       time = time_to_array(val)
-      Time.new @date.concat(*time)
+      Time.new *[ @date, time].flatten
     end
 
     
