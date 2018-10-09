@@ -26,6 +26,7 @@ class Doors::Tracker
   def stop!
     if running?
       e = Doors::Entry.new( nil, from: started, to: Time.now )
+      @store.add(e)
       @store.save!
       puts "Tracker stopped. Time elapsed: #{duration}"
       system "rm -f #{@path}"

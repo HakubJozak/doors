@@ -25,20 +25,6 @@ class Doors::Entry
     end
   end
 
-  def to_hash
-    f = '%H:%M:%S'
-
-    if @in && @out
-      [ @in.strftime(f), @out.strftime(f) ].join(' - ')
-    elsif @out
-      { 'out' => @out.strftime(f) }
-    elsif @in
-      { 'in'  => @in.strftime(f) }
-    elsif @duration
-      @duration.to_s
-    end
-  end
-
   def date
     Date.new(*@date)
   end

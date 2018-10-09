@@ -14,12 +14,14 @@ class Doors::Store
 
     entries.group_by(&:date).each do |day, es|
       key = day.strftime('%d_%A').downcase
-      days[key] = es.map(&:to_hash)
+      days[key] = es.map { |e| serialize_entry(e) }
     end
+
+    serialized = { 2018 => { 'october' => days }}    
 
     # TODO: pick the right file
     File.open("#{@root}/2018_october.yml","w") { |f|
-      f.write({ '2018' => { 'october' => days }}.to_yaml)
+      f.write(serialized.to_yaml)
     }
     
   end
@@ -43,6 +45,20 @@ class Doors::Store
 
     def parser
       @parser ||= Doors::Parser.new
+    end
+
+    def serialize_entry(e)
+      f = '%H:%M:%S'
+
+      if e.in && e.out
+        [ e.in.strftime(f), e.out.strftime(f) ].join(' - ')
+      elsif e.out
+        { 'out' => e.out.strftime(f) }
+      elsif e.in
+        { 'in'  => e.in.strftime(f) }
+      elsif e.duration
+        { 'duration' => e.duration.to_s }
+      end
     end
   
     # def generate_id
