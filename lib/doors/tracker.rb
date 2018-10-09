@@ -1,6 +1,5 @@
 require 'date'
 require 'yaml'
-
 require_relative 'entry'
 
 
@@ -12,10 +11,18 @@ class Doors::Tracker
     # Doors::Duration.new(Time.now - self.in).floor
   end
 
+  def status
+    if running?
+      "Tracker running #{duration}"
+    else
+      "Tracker is not running."
+    end
+  end
+
   def start!
     if running?
       # puts "Already running from #{started.strftime('%R')}."
-      puts "Time elapsed: #{duration}"
+      puts status
     else
       t = Time.now
       File.open(@path,'w') { |f| f.write(t.to_s) }
@@ -32,7 +39,7 @@ class Doors::Tracker
       system "rm -f #{@path}"
       e
     else
-      puts "Tracker is not running."
+      puts status
     end
   end
 
@@ -50,6 +57,6 @@ class Doors::Tracker
       secs = (Time.now - started.to_time).floor
       Doors::Duration.new(total: secs)
     end
-  
+
 
 end

@@ -12,6 +12,8 @@ class Doors::CLI
 
     if args.empty?
       puts Doors::Printer.new(@store).summary
+      puts "        %28s %s" % [ '', @tracker.status ]
+      puts "   " + "~" * 60
     else
       case cmd = args.shift
       when 'i', 'in', 'start'
