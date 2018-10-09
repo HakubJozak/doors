@@ -11,7 +11,6 @@ class Doors::Git
 
     def message
       "STDOUT: #{@out}\nSTDERR:#{@err}"
-
     end
   end
 
@@ -21,7 +20,7 @@ class Doors::Git
   end
 
   def sync!
-    puts '[detached] Syncing'
+    puts '[detached] Syncing GIT'
     
     detach {
       stash_save
@@ -47,7 +46,7 @@ class Doors::Git
   end
 
   private
-
+  
     # TODO: add --no-detach parameter to CLI
     def detach(&block)
       fork &block
