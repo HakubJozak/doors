@@ -17,7 +17,11 @@ class Doors::Store
       days[key] = es.map(&:to_hash)
     end
 
-    puts({ '2018': { 'october' => days }})
+    # TODO: pick the right file
+    File.open("#{@root}/2018_october.yml","w") { |f|
+      f.write({ '2018' => { 'october' => days }}.to_yaml)
+    }
+    
   end
 
   def entries
@@ -30,7 +34,7 @@ class Doors::Store
       entries = []
         
       Dir["#{@root}/*.yml"].each do |f|
-        puts "Loading #{f}"
+        # puts "Loading #{f}"
         entries << parser.load(f)
       end
 

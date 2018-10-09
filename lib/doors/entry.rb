@@ -2,13 +2,14 @@ class Doors::Entry
 
   include Doors::TimeOps
 
-  attr_reader :in, :out, :duration
+  attr_accessor :in, :out, :duration
 
-  def initialize(date, info = {})
+  # TODO: refactor and merge with ^
+  def initialize( date, info = {} )
     if date.is_a? Time
       @date = [ date.year, date.month, date.day ]
       @in = date
-    else
+    elsif date
       @date = if date.is_a? Date
                 [ date.year, date.month, date.day ]
               else
@@ -16,6 +17,11 @@ class Doors::Entry
               end
 
       set_times(info)
+    else
+      # HACK merge with new_tracked!
+      @in = info[:from]
+      @out = info[:to]
+      @date = [ @in.year, @in.month, @in.day ]
     end
   end
 

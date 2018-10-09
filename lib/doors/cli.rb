@@ -2,8 +2,8 @@ class Doors::CLI
 
   def initialize
     ensure_root_exists!
-    @tracker = Doors::Tracker.new(root)
-    @store   = Doors::Store.new(root)    
+    @store   = Doors::Store.new(root)
+    @tracker = Doors::Tracker.new(root, @store)
   end
 
   def run!(args)
@@ -29,7 +29,7 @@ class Doors::CLI
     <<~HELP
     Usage:
 
-      d   - prints entries summary 
+      d   - prints entries summary
       d i - (check IN) starts time tracking
       d o - (check OUT) stops time tracking
 
@@ -57,13 +57,13 @@ class Doors::CLI
         day_total += e.duration
       end
 
-      puts "  %48s %s" % [ '', day_total ]      
+      puts "  %48s %s" % [ '', day_total ]
     end
 
 
     line
     puts "   Total %41s %s" % [ '', total ]
-    
+
   end
 
   def line
@@ -82,6 +82,6 @@ class Doors::CLI
   def ensure_root_exists!
     system "mkdir -p #{root}"
   end
-  
+
 
 end
