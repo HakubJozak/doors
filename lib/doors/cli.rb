@@ -42,6 +42,8 @@ class Doors::CLI
     format = "   %26s | %5s - %5s |  %10s"
 
     @tracker.entries.group_by(&:date).each do |day, entries|
+      day_total = 0
+
       entries.each.with_index do |e,i|
         title = if i == 0
                   day.strftime("%A %d")
@@ -50,7 +52,10 @@ class Doors::CLI
         puts format % [ title, print(e.in), print(e.out), e.duration ]
 
         total += e.duration
+        day_total += e.duration
       end
+
+      puts "  %48s %s" % [ '', day_total ]      
     end
 
 
