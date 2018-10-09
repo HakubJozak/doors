@@ -16,6 +16,7 @@ class Doors::CLI
       case cmd = args.shift
       when 'i', 'in', 'start'
         @tracker.start!
+        @git.sync!
       when 'o', 'out', 'stop'
         if entry = @tracker.stop!
           @store.add(entry)
@@ -23,7 +24,7 @@ class Doors::CLI
           @git.sync!
         end
       when 's', 'sync'
-        @git.sync!
+        @git.inline.sync!
       when 'h', 'help'
         help
       else

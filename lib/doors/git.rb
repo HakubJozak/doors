@@ -1,6 +1,7 @@
 require 'open3'
 require 'date'
 
+# FIXME: use lock file and wait for other GIT operations to finish?
 class Doors::Git
 
   class SyncFailure < RuntimeError
@@ -19,8 +20,14 @@ class Doors::Git
     init! unless repo_exists?
   end
 
+  def inline
+    tap {
+      @inline = true
+    }
+  end
+
   def sync!
-    puts '[detached] Syncing GIT'
+    info 'Syncing GIT'
     
     detach {
       stash_save
@@ -33,7 +40,7 @@ class Doors::Git
   end
 
   def init!
-    puts '[detached] Initializing GIT repo'
+    info 'Initializing GIT repo'
 
     detach {
       git 'init'
@@ -46,10 +53,19 @@ class Doors::Git
   end
 
   private
+
+    def info(msg)
+      tag = '[detached]' unless @inline
+      puts [ tag, msg ].join(' ')
+    end
   
     # TODO: add --no-detach parameter to CLI
     def detach(&block)
-      fork &block
+      if @inline
+        block.call
+      else
+        fork &block
+      end
     end
 
     def commit
@@ -82,7 +98,9 @@ class Doors::Git
       @out, @err, @status = Open3.capture3(shell)
 
       # TODO: logger
-      # puts shell
+      if @inline
+        puts shell
+      end
       
       ensure_success! unless quiet
     end
