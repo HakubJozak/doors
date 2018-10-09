@@ -4,19 +4,26 @@ class Doors::CLI
     ensure_root_exists!
     @store   = Doors::Store.new(root)
     @tracker = Doors::Tracker.new(root, @store)
+    @git     = Doors::Git.new(root, @store)
   end
 
   def run!(args)
     args = args.dup
 
     if args.empty?
-      summary
+      puts Doors::Printer.new(@store).summary
     else
       case cmd = args.shift
       when 'i', 'in', 'start'
         @tracker.start!
       when 'o', 'out', 'stop'
-        @store.add @tracker.stop!
+        if entry = @tracker.stop!
+          @store.add(entry)
+          @store.save!
+          @git.sync!
+        end
+      when 's', 'sync'
+        @git.sync!
       when 'h', 'help'
         help
       else
@@ -29,50 +36,12 @@ class Doors::CLI
     <<~HELP
     Usage:
 
-      d   - prints entries summary
-      d i - (check IN) starts time tracking
-      d o - (check OUT) stops time tracking
+      d [d]     - display summary
+      d i[n]   - (check IN) starts time tracking
+      d o[out] - (check OUT) stops time tracking
+      d s[ync] - (SYNC) synchronizes GIT repo
 
     HELP
-  end
-
-  def summary
-    total = 0
-
-    puts "   OCTOBER 2018      "
-    line
-    format = "   %26s | %5s - %5s |  %10s"
-
-    @store.entries.group_by(&:date).each do |day, entries|
-      day_total = 0
-
-      entries.each.with_index do |e,i|
-        title = if i == 0
-                  day.strftime("%A %d")
-                end
-
-        puts format % [ title, print(e.in), print(e.out), e.duration ]
-
-        total += e.duration
-        day_total += e.duration
-      end
-
-      puts "  %48s %s" % [ '', day_total ]
-    end
-
-
-    line
-    puts "   Total %41s %s" % [ '', total ]
-
-  end
-
-  def line
-    puts [ "   ", "-" * 60 ].join
-  end
-
-  def print(val)
-    return if val.nil?
-    val.strftime("%H:%M")
   end
 
   def root

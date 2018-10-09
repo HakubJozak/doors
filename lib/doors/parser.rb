@@ -15,6 +15,10 @@ class Doors::Parser
         days.each do |day,entries|
           date = [ year, month, day.to_i ]
 
+          if entries.nil? || entries.empty?
+            next
+          end
+
           entries.map do |e|
             result << case e
                       when Integer, Float

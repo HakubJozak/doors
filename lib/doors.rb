@@ -10,3 +10,5 @@ require_relative 'doors/parser'
 
 require_relative 'doors/cli'
 require_relative 'doors/store'
+require_relative 'doors/git'
+require_relative 'doors/printer'
