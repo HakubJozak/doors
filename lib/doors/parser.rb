@@ -19,6 +19,13 @@ class Doors::Parser
             result << case e
                       when Integer, Float
                         Doors::Entry.new(date, 'duration' => e)
+                      when String
+                        if e.include? '-'
+                          a, b = e.split('-')
+                          Doors::Entry.new(date, 'in' => a, 'out' => b)
+                        else
+                          Doors::Entry.new(date, 'duration' => e)
+                        end
                       else
                         Doors::Entry.new(date, e)
                       end
