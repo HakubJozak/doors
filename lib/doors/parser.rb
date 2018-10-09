@@ -2,7 +2,7 @@ class Doors::Parser
 
   include Doors::TimeOps
 
-  def load!(path)
+  def load(path)
     return unless File.exist?(path)
 
     years = YAML.load_file(path)

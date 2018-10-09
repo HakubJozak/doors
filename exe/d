@@ -3,5 +3,5 @@
 require_relative '../lib/doors.rb'
 
 cli = Doors::CLI.new
-cli.parse!(ARGV)
+cli.run!(ARGV)
 

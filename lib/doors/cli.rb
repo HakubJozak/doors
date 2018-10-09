@@ -1,10 +1,12 @@
 class Doors::CLI
 
   def initialize
-    @tracker = Doors::Tracker.new
+    ensure_root_exists!
+    @tracker = Doors::Tracker.new(root)
+    @store   = Doors::Store.new(root)    
   end
 
-  def parse!(args)
+  def run!(args)
     args = args.dup
 
     if args.empty?
@@ -14,7 +16,7 @@ class Doors::CLI
       when 'i', 'in', 'start'
         @tracker.start!
       when 'o', 'out', 'stop'
-        @tracker.stop!
+        @store.add @tracker.stop!
       when 'h', 'help'
         help
       else
@@ -41,7 +43,7 @@ class Doors::CLI
     line
     format = "   %26s | %5s - %5s |  %10s"
 
-    @tracker.entries.group_by(&:date).each do |day, entries|
+    @store.entries.group_by(&:date).each do |day, entries|
       day_total = 0
 
       entries.each.with_index do |e,i|
@@ -72,5 +74,14 @@ class Doors::CLI
     return if val.nil?
     val.strftime("%H:%M")
   end
+
+  def root
+    "#{ENV['HOME']}/time"
+  end
+
+  def ensure_root_exists!
+    system "mkdir -p #{root}"
+  end
+  
 
 end

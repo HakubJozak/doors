@@ -9,3 +9,4 @@ require_relative 'doors/tracker'
 require_relative 'doors/parser'
 
 require_relative 'doors/cli'
+require_relative 'doors/store'

@@ -6,46 +6,39 @@ require_relative 'entry'
 
 class Doors::Tracker
 
-  attr_reader :entries
-
-  def initialize
-    ensure_dir_exists!
-    parser = Doors::Parser.new
-    @entries = parser.load!(path) || []
+  def initialize(root)
+    @path = "#{root}/running"
+    # Doors::Duration.new(Time.now - self.in).floor
   end
 
   def start!
+    if running?
+      puts "Already running from #{started.strftime('%R')}."
+      puts "Time elapsed: #{duration}"
+    else
+      File.open(@path,'w') { |f| f.write(Time.now.to_s) }
+      puts "Tracker started"
+    end
   end
 
   def stop!
+    system "rm #{@path}" if running?
   end
 
   private
 
-    def generate_id
-      SecureRandom.hex(3)    
+    def running?
+      File.exist?(@path)
     end
 
-    def save!
-      ensure_dir_exists!      
+    def started
+      @started ||= DateTime.parse File.read(@path)
     end
 
-    # Example:
-    #   
-    #  ~/time/october_2018.yml
-    # 
-    def path(d = Date.today)
-      month = d.strftime('%B').downcase
-      "#{dir}/#{d.year}_#{month}.yml"
+    def duration
+      secs = (Time.now - started.to_time).floor
+      Doors::Duration.new(total: secs)
     end
-
-    def dir
-      "#{ENV['HOME']}/time"
-    end
-
-    def ensure_dir_exists!
-      system "mkdir -p #{dir}"
-    end
-    
   
+
 end
