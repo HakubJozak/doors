@@ -40,6 +40,7 @@ class Doors::Tracker
       e
     else
       puts status
+      nil
     end
   end
 

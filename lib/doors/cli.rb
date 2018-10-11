@@ -20,11 +20,7 @@ class Doors::CLI
         @tracker.start!
         @git.sync!
       when 'o', 'out', 'stop'
-        if entry = @tracker.stop!
-          @store.add(entry)
-          @store.save!
-          @git.sync!
-        end
+        @git.sync! if @tracker.stop!
       when 's', 'sync'
         @git.inline.sync!
       when 'h', 'help'

@@ -28,7 +28,7 @@ class Doors::Git
 
   def sync!
     info 'Syncing GIT'
-    
+
     detach {
       stash_save
       git 'pull -r'
@@ -58,7 +58,7 @@ class Doors::Git
       tag = '[detached]' unless @inline
       puts [ tag, msg ].join(' ')
     end
-  
+
     # TODO: add --no-detach parameter to CLI
     def detach(&block)
       if @inline
@@ -87,7 +87,7 @@ class Doors::Git
      unless @err =~ /No stash entries/
         ensure_success!
       end
-    end  
+    end
 
     def repo_exists?
       File.exists? "#{@root}/.git"
@@ -101,12 +101,12 @@ class Doors::Git
       if @inline
         puts shell
       end
-      
+
       ensure_success! unless quiet
     end
 
     def ensure_success!
-      raise SyncFailure.new(@err,@out) unless @status.exitstatus.zero?  
+      raise SyncFailure.new(@err,@out) unless @status.exitstatus.zero?
     end
 
 end
