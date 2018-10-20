@@ -9,26 +9,53 @@ class Doors::Store
   end
 
   def save!
-    files = entries.group_by { |entry,_|
+    by_months.each do |tag, month_entries|
+      
+
+    #   # TODO: pick the right file
+    #   File.open("#{@root}/#{file}.yml","w") { |f|
+    #     f.write(serialized.to_yaml)
+    #   }
+    end
+  end
+
+  def to_hash
+    out = {}
+
+    entries.each do |entry|
+      date = entry.date
+      day   = date.strftime('%d_%A').downcase
+      month = date.strftime('%B').downcase
+      year  = date.year
+
+      y = out[year] ||= {}
+      m = y[month]  ||= {}
+      d = m[day]    ||= []
+
+      d << serialize_entry(entry)
+    end
+
+    out
+  end
+
+
+  # def serialize
+  #   days = {}
+
+  #   entries.group_by(&:date).each do |day, es|
+  #     key = day.strftime('%d_%A').downcase
+  #     days[key] = es.map { |e| serialize_entry(e) }
+  #   end
+
+  #   d = entries.first.date
+  #   month = d.strftime('%B').downcase
+  #   serialized = { d.year.to_i => { month => days }}
+  # end
+
+  def by_months
+    entries.group_by { |entry,_|
       entry.date.strftime('%Y_%B').downcase
     }
-
-    files.each do |file, month_entries|
-      days = {}
-
-      month_entries.group_by(&:date).each do |day, es|
-        key = day.strftime('%d_%A').downcase
-        days[key] = es.map { |e| serialize_entry(e) }
-      end
-
-      year, month = file.split('_')
-      serialized = { year.to_i => { month => days }}
-
-      # TODO: pick the right file
-      File.open("#{@root}/#{file}.yml","w") { |f|
-        f.write(serialized.to_yaml)
-      }
-    end
   end
 
   def entries
