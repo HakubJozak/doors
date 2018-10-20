@@ -2,8 +2,8 @@ class Doors::CLI
 
   def initialize
     @config  = Doors::Config.new
-    @store   = Doors::Store.new(@config.root)
-    @tracker = Doors::Tracker.new(@config.root, @store)
+    @store   = Doors::Store.new("#{@config.root}/#{project}")
+    @tracker = Doors::Tracker.new(@config, @store)
     @git     = Doors::Git.new(@config, @store)
   end
 
@@ -29,6 +29,10 @@ class Doors::CLI
         help
       end
     end
+  end
+
+  def project
+    File.basename(`pwd`.strip)
   end
 
   def help

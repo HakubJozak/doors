@@ -5,10 +5,9 @@ require_relative 'entry'
 
 class Doors::Tracker
 
-  def initialize(root, store)
-    @path = "#{root}/running"
+  def initialize(config, store)
+    @path = "#{config.root}/running"
     @store = store
-    # Doors::Duration.new(Time.now - self.in).floor
   end
 
   def status

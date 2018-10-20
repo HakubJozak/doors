@@ -2,6 +2,10 @@ class Doors::Store
 
   def initialize(root)
     @root = root
+
+    unless Dir.exist?(@root)
+      system "mkdir -p #{@root}"
+    end    
   end
 
   def add(entry)
@@ -9,13 +13,16 @@ class Doors::Store
   end
 
   def save!
-    by_months.each do |tag, month_entries|
-      
+    to_hash.each do |year,months|
+      months.each do |month,days|
+        path = "#{@root}/#{year}_#{month}.yml"
+        
+        File.open( path,"w") { |f|
+          data = { year => { month => days }}
+          f.write(data.to_yaml)
+        }
 
-    #   # TODO: pick the right file
-    #   File.open("#{@root}/#{file}.yml","w") { |f|
-    #     f.write(serialized.to_yaml)
-    #   }
+      end
     end
   end
 
@@ -52,12 +59,6 @@ class Doors::Store
   #   serialized = { d.year.to_i => { month => days }}
   # end
 
-  def by_months
-    entries.group_by { |entry,_|
-      entry.date.strftime('%Y_%B').downcase
-    }
-  end
-
   def entries
     @entries ||= load!
   end
@@ -72,7 +73,7 @@ class Doors::Store
         entries << parser.load(f)
       end
 
-      entries.flatten!
+      entries.flatten
     end
 
     def parser
@@ -93,17 +94,13 @@ class Doors::Store
       end
     end
 
-    # def generate_id
-    #   SecureRandom.hex(3)
-    # end
-
     # Example:
     #
     #  ~/time/october_2018.yml
     #
-    def path(d = Date.today)
+    def path_for(d = Date.today)
       month = d.strftime('%B').downcase
-      "#{dir}/#{d.year}_#{month}.yml"
+      
     end
 
 
