@@ -2,11 +2,11 @@ require 'yaml'
 require 'ostruct'
 
 class Doors::Config
+
   def initialize
-    file = "#{root}/config.yml"
-    @vars = YAML.load_file(file)
+    @vars = YAML.load_file(path)
   rescue Errno::ENOENT
-    fail_and_exit "Missing config file '#{file}'"
+    fail_and_exit "Missing config file '#{path}'"
   rescue Psych::SyntaxError
     fail_and_exit "Invalid config file"
   end
@@ -15,12 +15,16 @@ class Doors::Config
     if @vars.has_key?('git')
       OpenStruct.new(@vars['git'])
     else
-      fail_and_exit("Missing 'git' section in #{file}")
+      fail_and_exit("Missing 'git' section in #{path}")
     end
   end
 
+  def path
+    "#{ENV['HOME']}/.config/doors.yml"
+  end
+
   def root
-    path = "#{ENV['HOME']}/time"
+    path = @vars['root'] || "#{ENV['HOME']}/time"
 
     unless Dir.exist?(path)
       system "mkdir -p #{path}"

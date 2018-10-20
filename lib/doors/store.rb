@@ -9,21 +9,26 @@ class Doors::Store
   end
 
   def save!
-    # TODO: group by year and month
-    days = {}
-
-    entries.group_by(&:date).each do |day, es|
-      key = day.strftime('%d_%A').downcase
-      days[key] = es.map { |e| serialize_entry(e) }
-    end
-
-    serialized = { 2018 => { 'october' => days }}
-
-    # TODO: pick the right file
-    File.open("#{@root}/2018_october.yml","w") { |f|
-      f.write(serialized.to_yaml)
+    files = entries.group_by { |entry,_|
+      entry.date.strftime('%Y_%B').downcase
     }
 
+    files.each do |file, month_entries|
+      days = {}
+
+      month_entries.group_by(&:date).each do |day, es|
+        key = day.strftime('%d_%A').downcase
+        days[key] = es.map { |e| serialize_entry(e) }
+      end
+
+      year, month = file.split('_')
+      serialized = { year.to_i => { month => days }}
+
+      # TODO: pick the right file
+      File.open("#{@root}/#{file}.yml","w") { |f|
+        f.write(serialized.to_yaml)
+      }
+    end
   end
 
   def entries
