@@ -5,7 +5,7 @@ class Doors::Parser
   def load(path)
     return unless File.exist?(path)
 
-    years = YAML.load_file(path)
+    years = YAML.load_file(path) || {}
     result = []
 
     years.each do |year,months|
