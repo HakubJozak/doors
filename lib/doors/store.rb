@@ -17,13 +17,13 @@ class Doors::Store
       days[key] = es.map { |e| serialize_entry(e) }
     end
 
-    serialized = { 2018 => { 'october' => days }}    
+    serialized = { 2018 => { 'october' => days }}
 
     # TODO: pick the right file
     File.open("#{@root}/2018_october.yml","w") { |f|
       f.write(serialized.to_yaml)
     }
-    
+
   end
 
   def entries
@@ -34,13 +34,13 @@ class Doors::Store
 
     def load!
       entries = []
-        
+
       Dir["#{@root}/*.yml"].each do |f|
         # puts "Loading #{f}"
         entries << parser.load(f)
       end
 
-      entries.flatten!      
+      entries.flatten!
     end
 
     def parser
@@ -60,7 +60,7 @@ class Doors::Store
         { 'duration' => e.duration.to_s }
       end
     end
-  
+
     # def generate_id
     #   SecureRandom.hex(3)
     # end
@@ -75,5 +75,5 @@ class Doors::Store
     end
 
 
-  
+
 end

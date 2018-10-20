@@ -5,6 +5,7 @@ require 'date'
 class Doors::Git
 
   class SyncFailure < RuntimeError
+
     def initialize(out,err)
       @out = out
       @err = err
@@ -15,8 +16,8 @@ class Doors::Git
     end
   end
 
-  def initialize(root, store)
-    @root = root
+  def initialize(config, store)
+    @config = config
     init! unless repo_exists?
   end
 
@@ -26,16 +27,25 @@ class Doors::Git
     }
   end
 
+  def branch
+    @config.git.branch
+  end
+
+  def repo
+    @config.git.repo    
+  end
+
   def sync!
     info 'Syncing GIT'
 
     detach {
       stash_save
-      git 'pull -r'
+      git "checkout #{branch}"
+      git "pull -r origin #{branch}"
       stash_pop
       git 'add .'
       commit
-      git "push origin master"
+      git "push origin #{branch}"
     }
   end
 
@@ -44,11 +54,12 @@ class Doors::Git
 
     detach {
       git 'init'
-      git 'remote add origin git@github.com:HakubJozak/time.git'
-      system "touch #{@root}/.gitignore"
+      git "remote add origin #{repo}"
+      system "touch #{@config.root}/.gitignore"
       git 'add .'
+      git "checkout -b #{branch}"
       git 'commit -m Initial'
-      git 'push -u origin master'
+      git "push -u origin #{branch}"
     }
   end
 
@@ -90,11 +101,11 @@ class Doors::Git
     end
 
     def repo_exists?
-      File.exists? "#{@root}/.git"
+      File.exists? "#{@config.root}/.git"
     end
 
     def git(cmd, quiet: false)
-      shell = "git --no-pager -C #{@root} #{cmd}"
+      shell = "git --no-pager -C #{@config.root} #{cmd}"
       @out, @err, @status = Open3.capture3(shell)
 
       # TODO: logger

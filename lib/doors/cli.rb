@@ -1,10 +1,10 @@
 class Doors::CLI
 
   def initialize
-    ensure_root_exists!
-    @store   = Doors::Store.new(root)
-    @tracker = Doors::Tracker.new(root, @store)
-    @git     = Doors::Git.new(root, @store)
+    @config  = Doors::Config.new
+    @store   = Doors::Store.new(@config.root)
+    @tracker = Doors::Tracker.new(@config.root, @store)
+    @git     = Doors::Git.new(@config, @store)
   end
 
   def run!(args)
@@ -43,13 +43,6 @@ class Doors::CLI
     HELP
   end
 
-  def root
-    "#{ENV['HOME']}/time"
-  end
-
-  def ensure_root_exists!
-    system "mkdir -p #{root}"
-  end
 
 
 end
