@@ -32,7 +32,8 @@ class Doors::CLI
   end
 
   def project
-    File.basename(`pwd`.strip)
+    # File.basename(`pwd`.strip)
+    'kdm'
   end
 
   def help
