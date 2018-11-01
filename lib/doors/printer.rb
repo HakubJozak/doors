@@ -4,27 +4,34 @@ class Doors::Printer
     @io = StringIO.new
   end
 
-  def totals
-    today = entries.inject(0) { |sum,e|
-      if e.date == Date.today
-        sum += e.duration
-      end
+  # def totals
+  #   today = entries.inject(0) { |sum,e|
+  #     if e.date == Date.today
+  #       sum += e.duration
+  #     end
 
-      sum
+  #     sum
+  #   }
+
+  #   @io.puts "Today:   %s" % today
+  #   @io.puts "Month:   %s" % month
+  # end
+
+  def this_month_entries
+    @store.entries.select { |e|
+      e.date.month == today.month &&
+        e.date.year  == today.year
     }
-
-    @io.puts "Today:   %s" % today
-    @io.puts "Month:   %s" % month   
   end
 
   def summary
     total = 0
 
-    @io.puts "   OCTOBER 2018      "
+    month_header
     line
     format = "   %26s | %5s - %5s |  %10s"
 
-    @store.entries.group_by(&:date).each do |day, entries|
+    this_month_entries.group_by(&:date).each do |day, entries|
       day_total = 0
 
       entries.each.with_index do |e,i|
@@ -44,9 +51,18 @@ class Doors::Printer
     line
 
     @io.puts "   Total %41s %s" % [ '', total ]
+
     @io.string
   end
 
+  def month_header
+    @io.puts today.strftime("   %B %Y")
+  end
+
+  def today
+    Date.today
+  end
+  
   def line
     @io.puts [ "   ", "-" * 60 ].join
   end
