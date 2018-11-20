@@ -62,7 +62,7 @@ class Doors::Printer
   def today
     Date.today
   end
-  
+
   def line
     @io.puts [ "   ", "-" * 60 ].join
   end

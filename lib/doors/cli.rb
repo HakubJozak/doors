@@ -11,7 +11,7 @@ class Doors::CLI
     args = args.dup
 
     if args.empty?
-      puts Doors::Printer.new(@store).summary
+      puts printer.summary
       puts "        %28s %s" % [ '', @tracker.status ]
       puts "   " + "~" * 60
     else
@@ -25,6 +25,21 @@ class Doors::CLI
         @git.inline.sync!
       when 'h', 'help'
         help
+      when 'i3'
+        if ENV['BLOCK_BUTTON'].empty?
+          if @tracker.running?
+            puts "<span color='green'>IN</span>"
+          else
+            puts "<span color='red'>OUT</span>"
+          end
+        else
+          # if @tracker.running?
+          #   @git.sync! if @tracker.stop!
+          # else
+          #   @tracker.start!
+          #   @git.sync!
+          # end
+        end
       else
         help
       end
@@ -36,6 +51,10 @@ class Doors::CLI
     'kdm'
   end
 
+  def printer
+    @printer ||= Doors::Printer.new(@store)
+  end
+  
   def help
     <<~HELP
     Usage:

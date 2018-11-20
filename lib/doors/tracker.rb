@@ -43,11 +43,11 @@ class Doors::Tracker
     end
   end
 
-  private
+  def running?
+    File.exist?(@path)
+  end
 
-    def running?
-      File.exist?(@path)
-    end
+  private
 
     def started
       @started ||= DateTime.parse File.read(@path)
