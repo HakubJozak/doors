@@ -16,56 +16,51 @@ class Doors::Printer
   #   @io.puts "Today:   %s" % today
   #   @io.puts "Month:   %s" % month
   # end
-
-  def month_entries(month)
-    @store.entries.select { |e|
-      e.date.month == month.month &&
-        e.date.year  == month.year
-    }
-  end
-
   def summary(month)
-    total = 0
+    # entries = @store.filter.last_week
+    entries = @store.filter.by_month(month)
 
     month_header(month)
-    line
-    format = "   %26s | %5s - %5s |  %10s"
+    horizontal_ruler
 
-    month_entries(month).group_by(&:date).each do |day, entries|
-      day_total = 0
-
-      entries.each.with_index do |e,i|
-        title = if i == 0
-                  day.strftime("%A %d")
-                end
-
-        @io.puts format % [ title, print(e.in), print(e.out), e.duration ]
-
-        total += e.duration
-        day_total += e.duration
-      end
-
-      @io.puts "  %48s %s" % [ '', day_total ]
+    entries.group_by(&:date).each do |day, entries|
+      detailed_day( day, entries)
     end
 
-    line
-
-    @io.puts "   Total %41s %s" % [ '', total ]
+    horizontal_ruler
+    total_info(entries)
 
     @io.string
   end
 
+  def total_info(entries)
+    total = entries.inject(0) { |total,e| total += e.duration }
+    puts "   Total %41s %s" % [ '', total ]    
+  end
+
+  def detailed_day(day, entries)
+    day_total = 0
+    format = "   %26s | %5s - %5s |  %10s"
+
+    entries.each.with_index do |e,i|
+      title = if i == 0
+                day.strftime("%A %d")
+              end
+
+      puts(format % [ title, print(e.in), print(e.out), e.duration ])
+
+      day_total += e.duration
+    end
+
+    puts "  %48s %s" % [ '', day_total ]    
+  end
+
   def month_header(month)
-    @io.puts month.strftime("   %B %Y")
+    puts month.strftime("   %B %Y")
   end
 
-  def today
-    # Date.new(2018,11,30)
-    Date.today
-  end
-
-  def line
-    @io.puts [ "   ", "-" * 60 ].join
+  def horizontal_ruler
+    puts [ "   ", "-" * 60 ].join
   end
 
   def print(val)
@@ -73,4 +68,7 @@ class Doors::Printer
     val.strftime("%H:%M")
   end
 
+  def puts(*args)
+    @io.puts *args
+  end
 end

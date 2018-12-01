@@ -5,9 +5,13 @@ class Doors::Store
 
     unless Dir.exist?(@root)
       system "mkdir -p #{@root}"
-    end    
+    end
   end
 
+  def filter
+    @filter ||= Doors::EntriesFilter.new(self)
+  end
+  
   def add(entry)
     entries << entry unless entry.nil?
   end
@@ -16,7 +20,7 @@ class Doors::Store
     to_hash.each do |year,months|
       months.each do |month,days|
         path = "#{@root}/#{year}_#{month}.yml"
-        
+
         File.open( path,"w") { |f|
           data = { year => { month => days }}
           f.write(data.to_yaml)
@@ -100,7 +104,7 @@ class Doors::Store
     #
     def path_for(d = Date.today)
       month = d.strftime('%B').downcase
-      
+
     end
 
 
