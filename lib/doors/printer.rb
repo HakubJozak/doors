@@ -17,21 +17,21 @@ class Doors::Printer
   #   @io.puts "Month:   %s" % month
   # end
 
-  def this_month_entries
+  def month_entries(month)
     @store.entries.select { |e|
-      e.date.month == today.month &&
-        e.date.year  == today.year
+      e.date.month == month.month &&
+        e.date.year  == month.year
     }
   end
 
-  def summary
+  def summary(month)
     total = 0
 
-    month_header
+    month_header(month)
     line
     format = "   %26s | %5s - %5s |  %10s"
 
-    this_month_entries.group_by(&:date).each do |day, entries|
+    month_entries(month).group_by(&:date).each do |day, entries|
       day_total = 0
 
       entries.each.with_index do |e,i|
@@ -55,11 +55,12 @@ class Doors::Printer
     @io.string
   end
 
-  def month_header
-    @io.puts today.strftime("   %B %Y")
+  def month_header(month)
+    @io.puts month.strftime("   %B %Y")
   end
 
   def today
+    # Date.new(2018,11,30)
     Date.today
   end
 
