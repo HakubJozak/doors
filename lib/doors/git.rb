@@ -5,7 +5,6 @@ require 'date'
 class Doors::Git
 
   class SyncFailure < RuntimeError
-
     def initialize(out,err)
       @out = out
       @err = err
@@ -32,19 +31,17 @@ class Doors::Git
   end
 
   def repo
-    @config.git.repo    
+    @config.git.repo
   end
 
   def sync!
     info 'Syncing GIT'
 
     detach {
-      stash_save
+      git "fetch"
       git "checkout #{branch}"
-      git "pull -r origin #{branch}"
-      stash_pop
-      git 'add .'
-      commit
+      commit_all
+      git "merge origin/#{branch}"
       git "push origin #{branch}"
     }
   end
@@ -79,7 +76,7 @@ class Doors::Git
       end
     end
 
-    def commit
+    def commit_all
       msg = "#{`hostname`.strip}-#{DateTime.now.rfc3339}"
       git "commit -m '#{msg}'", quiet: true
 
@@ -88,17 +85,17 @@ class Doors::Git
       end
     end
 
-    def stash_save
-      git 'stash', quiet: true
-    end
+    # def stash_save
+    #   git 'stash', quiet: true
+    # end
 
-    def stash_pop
-      git 'stash pop', quiet: true
+    # def stash_pop
+    #   git 'stash pop', quiet: true
 
-     unless @err =~ /No stash entries/
-        ensure_success!
-      end
-    end
+    #  unless @err =~ /No stash entries/
+    #     ensure_success!
+    #   end
+    # end
 
     def repo_exists?
       File.exists? "#{@config.root}/.git"
