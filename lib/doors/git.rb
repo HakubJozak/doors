@@ -77,6 +77,8 @@ class Doors::Git
     end
 
     def commit_all
+      git "add ."
+
       msg = "#{`hostname`.strip}-#{DateTime.now.rfc3339}"
       git "commit -m '#{msg}'", quiet: true
 
