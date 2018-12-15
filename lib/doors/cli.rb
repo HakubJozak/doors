@@ -19,6 +19,8 @@ class Doors::CLI
     @options = Doors::CLIOptions.new(args)
 
     execute_command!(command)
+  rescue Doors::Git::Error => e
+    puts e.message.red
   end
 
   private
@@ -61,6 +63,7 @@ class Doors::CLI
     def project
       # File.basename(`pwd`.strip)
       'kdm'
+      'inex'
     end
 
     def printer

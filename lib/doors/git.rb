@@ -4,7 +4,11 @@ require 'date'
 # FIXME: use lock file and wait for other GIT operations to finish?
 class Doors::Git
 
-  class SyncFailure < RuntimeError
+  class Error < ::RuntimeError ; end
+
+  class NoSSHKey < Error ; end
+
+  class SyncFailure < Error
     def initialize(out,err)
       @out = out
       @err = err
@@ -36,13 +40,14 @@ class Doors::Git
 
   def sync!
     info 'Syncing GIT'
+    ensure_ssh_authenticated!
 
     detach {
       git "fetch"
       git "checkout #{branch}"
       commit_all
       git "merge origin/#{branch}"
-      git "push origin #{branch}"
+      push
     }
   end
 
@@ -56,15 +61,14 @@ class Doors::Git
       git 'add .'
       git "checkout -b #{branch}"
       git 'commit -m Initial'
-      git "push -u origin #{branch}"
+      push
     }
   end
 
   private
-
     def info(msg)
       tag = '[detached]' unless @inline
-      puts [ tag, msg ].join(' ')
+      puts [ tag, msg ].compact.join(' ')
     end
 
     # TODO: add --no-detach parameter to CLI
@@ -85,6 +89,11 @@ class Doors::Git
       unless @out =~ /nothing.to.commit/
         ensure_success!
       end
+    end
+
+    def push
+      ensure_ssh_authenticated!
+      git "push -u origin #{branch}"      
     end
 
     # def stash_save
@@ -118,5 +127,14 @@ class Doors::Git
     def ensure_success!
       raise SyncFailure.new(@err,@out) unless @status.exitstatus.zero?
     end
+
+    def ensure_ssh_authenticated!
+      output = `ssh-add -l`
+
+      if output =~ /The agent has no identities/
+        raise NoSSHKey.new "No SSH identity found. Use ssh-add to add it."
+      end
+    end
+
 
 end
