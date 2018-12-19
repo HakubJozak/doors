@@ -93,7 +93,7 @@ class Doors::Git
 
     def push
       ensure_ssh_authenticated!
-      git "push -u origin #{branch}"      
+      git "push -u origin #{branch}"
     end
 
     # def stash_save
@@ -129,10 +129,18 @@ class Doors::Git
     end
 
     def ensure_ssh_authenticated!
+      return unless (action = @config.git.check_ssh)
+
       output = `ssh-add -l`
 
       if output =~ /The agent has no identities/
-        raise NoSSHKey.new "No SSH identity found. Use ssh-add to add it."
+        if action.downcase == 'ask'
+          puts 'Missing SSH identites. Running ssh-add:'.yellow
+          system 'ssh-add'
+        else
+          raise NoSSHKey.
+                  new "No SSH identity found. Use ssh-add to add it."
+        end
       end
     end
 

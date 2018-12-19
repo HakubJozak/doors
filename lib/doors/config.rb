@@ -8,14 +8,14 @@ class Doors::Config
   rescue Errno::ENOENT
     fail_and_exit "Missing config file '#{path}'"
   rescue Psych::SyntaxError
-    fail_and_exit "Invalid config file"
+    fail_and_exit "Invalid YAML syntax in config file: #{e.message}"
   end
 
   def git
     if @vars.has_key?('git')
       OpenStruct.new(@vars['git'])
     else
-      fail_and_exit("Missing 'git' section in #{path}")
+      fail_and_exit("Missing 'git' section in config file #{path}")
     end
   end
 
@@ -34,7 +34,7 @@ class Doors::Config
   end
 
   def fail_and_exit(msg)
-    puts msg
+    puts msg.red
     exit 1
   end
 

@@ -62,8 +62,8 @@ class Doors::CLI
 
     def project
       # File.basename(`pwd`.strip)
-      'kdm'
       'inex'
+      'kdm'
     end
 
     def printer
