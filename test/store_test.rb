@@ -5,7 +5,7 @@ class StoreTest < Minitest::Test
 
   def test_to_hash
     store = Doors::Store.new('test/files/store')
-    assert_equal store.to_hash, {
+    assert_equal({
       2018=>
       {"october"=>
        {"01_monday"=>["11:51:33 - 13:00:14", "13:46:28 - 16:13:00", "16:24:11 - 17:17:26"],
@@ -17,7 +17,7 @@ class StoreTest < Minitest::Test
        },
        "september"=>{"01_saturday"=>["11:51:33 - 13:00:14"] }
       }
-    }
+    }, store.to_hash)
   end
 
   def test_to_hash_empty
@@ -30,9 +30,10 @@ class StoreTest < Minitest::Test
   def test_add
     Dir.mktmpdir('doors-test') do |dir|
       store = Doors::Store.new(dir)
-      entry = Doors::Entry.new( Date.today, 'duration' => '1m')
+      entry = Doors::Entry.new( Date.new(2018,12,21), 'duration' => '1m')
       store.add(entry)
-      puts store.to_hash
+      assert_equal( { 2018=>{"december"=>{"21_friday"=>[{"duration"=>"00:01:00"}]}}},
+                    store.to_hash )
     end
   end  
     
