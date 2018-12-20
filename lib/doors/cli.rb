@@ -8,13 +8,8 @@ class Doors::CLI
   end
 
   def run!(args)
-    args = args.dup
 
-    command = if args.first&.start_with?('-')
-                nil
-              else
-                args.shift
-              end
+
 
     @options = Doors::CLIOptions.new(args)
 

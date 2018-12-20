@@ -1,10 +1,7 @@
 class Doors::CLIOptions
   def initialize(args)
-    @opts = if args.empty?
-              {}
-            else
-              parse!(args)
-            end
+    @args = args.dup
+    parse extract_commands!
   end
 
   def month
@@ -19,6 +16,14 @@ class Doors::CLIOptions
   end
 
   private
+    def extract_commands!
+      # TOOD: there must be a better regexp way 
+      @commands = []
+      @args.gsub(/ [a-z]+|^[a-z]+/) { |s|
+        @commands << s ; ''
+      }
+    end
+  
     def today
       Date.today
     end
