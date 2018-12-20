@@ -2,9 +2,9 @@ class Doors::CLI
 
   def initialize
     @config  = Doors::Config.new
+    @git     = Doors::Git.new(@config)
     @store   = Doors::Store.new("#{@config.root}/#{project}")
     @tracker = Doors::Tracker.new(@config, @store)
-    @git     = Doors::Git.new(@config, @store)
   end
 
   def run!(args)

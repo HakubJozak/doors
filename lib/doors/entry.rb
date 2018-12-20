@@ -34,7 +34,7 @@ class Doors::Entry
     def set_times(info)
       @in = create_time( info['in'] )
       @out = create_time( info['out'] )
-      @duration = create_duration( info['duration'] )
+      @duration = Doors::Duration.parse( info['duration'] )
 
       if @in && @out && @duration.nil?
         @duration = Doors::Duration.new(total: (@out - @in).floor)
@@ -53,6 +53,13 @@ class Doors::Entry
       Time.new *[ @date, time].flatten
     end
 
-
+    def time_to_array(time)
+      # Converts floats to duration-like strings
+      str = time.to_s.gsub('.',':')
+      array = str.split(':')[0..2].map(&:to_i)
+      array.push(0) while array.size < 2
+      array
+    end
+    
 
 end

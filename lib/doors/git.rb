@@ -19,7 +19,7 @@ class Doors::Git
     end
   end
 
-  def initialize(config, store)
+  def initialize(config)
     @config = config
     init! unless repo_exists?
   end

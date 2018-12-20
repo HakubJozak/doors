@@ -20,6 +20,23 @@ class StoreTest < Minitest::Test
     }
   end
 
+  def test_to_hash_empty
+    Dir.mktmpdir('doors-test') do |dir|
+      store = Doors::Store.new(dir)
+      assert_equal Hash.new, store.to_hash
+    end
+  end
+
+  def test_add
+    Dir.mktmpdir('doors-test') do |dir|
+      store = Doors::Store.new(dir)
+      entry = Doors::Entry.new( Date.today, 'duration' => '1m')
+      store.add(entry)
+      puts store.to_hash
+    end
+  end  
+    
+
 
 
 end
