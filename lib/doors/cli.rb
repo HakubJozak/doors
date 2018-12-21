@@ -1,5 +1,5 @@
 require_relative 'commands/print'
-# require_relative 'commands/start'
+require_relative 'commands/start'
 
 
 class Doors::CLI
@@ -16,6 +16,8 @@ class Doors::CLI
     execute_command!(argv)
   rescue Doors::Git::Error => e
     puts e.message.red
+  rescue Doors::Error => e
+    puts e.message.red
   end
 
   private
@@ -24,8 +26,7 @@ class Doors::CLI
         when nil, '', 'p', 'print'
           Doors::Commands::Print.new(argv, @store, @tracker).run!
         when 'i', 'in', 'start'
-          @tracker.start!
-          @git.sync!
+          Doors::Commands::Start.new(argv, @tracker, @config).run!
         when 'o', 'out', 'stop'
           @git.sync! if @tracker.stop!
         when 's', 'sync'

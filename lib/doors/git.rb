@@ -4,7 +4,7 @@ require 'date'
 # FIXME: use lock file and wait for other GIT operations to finish?
 class Doors::Git
 
-  class Error < ::RuntimeError ; end
+  class Error < ::Doors::Error ; end
 
   class NoSSHKey < Error ; end
 

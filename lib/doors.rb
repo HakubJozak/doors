@@ -1,4 +1,6 @@
 module Doors
+  class Error < RuntimeError ; end
+
   module Commands
   end
 end

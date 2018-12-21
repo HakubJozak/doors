@@ -33,6 +33,11 @@ class Doors::Config
     path
   end
 
+  def projects
+    @projects ||=
+      Dir["#{root}/*"].select { |f| File.directory?(f) }
+  end
+
   def fail_and_exit(msg)
     puts msg.red
     exit 1

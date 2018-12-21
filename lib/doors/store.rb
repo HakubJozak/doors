@@ -11,7 +11,7 @@ class Doors::Store
   def filter
     @filter ||= Doors::EntriesFilter.new(self)
   end
-  
+
   def add(entry)
     entries << entry unless entry.nil?
   end
@@ -104,7 +104,6 @@ class Doors::Store
     #
     def path_for(d = Date.today)
       month = d.strftime('%B').downcase
-
     end
 
 
