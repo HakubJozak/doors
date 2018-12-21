@@ -1,3 +1,7 @@
+require_relative 'commands/print'
+# require_relative 'commands/start'
+
+
 class Doors::CLI
 
   def initialize
@@ -7,29 +11,18 @@ class Doors::CLI
     @tracker = Doors::Tracker.new(@config, @store)
   end
 
-  def run!(args)
-    args = args.dup
-
-    command = if args.first&.start_with?('-')
-                nil
-              else
-                args.shift
-              end
-
-    @options = Doors::CLIOptions.new(args)
-
-    execute_command!(command)
+  def run!(argv)
+    @command = argv.shift
+    execute_command!(argv)
   rescue Doors::Git::Error => e
     puts e.message.red
   end
 
   private
-    def execute_command!(command)
-      case command
+    def execute_command!(argv)
+      case @command
         when nil, '', 'p', 'print'
-          puts printer.summary(@options.month)
-          puts "        %28s %s" % [ '', @tracker.status ]
-          puts "   " + "~" * 60
+          Doors::Commands::Print.new(argv, @store, @tracker).run!
         when 'i', 'in', 'start'
           @tracker.start!
           @git.sync!
@@ -64,10 +57,6 @@ class Doors::CLI
       # File.basename(`pwd`.strip)
       'inex'
       'kdm'
-    end
-
-    def printer
-      @printer ||= Doors::Printer.new(@store)
     end
 
     def help

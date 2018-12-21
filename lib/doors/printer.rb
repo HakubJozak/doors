@@ -35,7 +35,7 @@ class Doors::Printer
 
   def total_info(entries)
     total = entries.inject(0) { |total,e| total += e.duration }
-    puts "   Total %41s %s" % [ '', total ]    
+    puts "   Total %41s %s" % [ '', total ]
   end
 
   def detailed_day(day, entries)
@@ -52,7 +52,7 @@ class Doors::Printer
       day_total += e.duration
     end
 
-    puts "  %48s %s" % [ '', day_total ]    
+    puts "  %48s %s" % [ '', day_total ]
   end
 
   def month_header(month)
