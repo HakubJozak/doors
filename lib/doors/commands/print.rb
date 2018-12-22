@@ -3,14 +3,17 @@ class Doors::Commands::Print
   include Doors::ProjectSelector
   attr_reader :month
 
-  def initialize(argv, store, tracker, config)
+  # TODO - pass Doors::CLI object with public methods
+  def initialize(argv, store, tracker, config, git)
     @store = store
     @tracker = tracker
     @config = config
+    @git = git
     parse_month!(argv.first)
   end
 
   def run!
+    @git.checkout!
     puts "   Project: #{selected_project.light_blue}"
     puts printer.summary(month)
     puts "        %28s %s" % [ '', @tracker.status ]

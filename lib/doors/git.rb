@@ -38,13 +38,17 @@ class Doors::Git
     @config.git.repo
   end
 
+  def checkout!
+    git "checkout #{branch}"    
+  end
+
   def sync!
     info 'Syncing GIT'
     ensure_ssh_authenticated!
 
     detach {
       git "fetch"
-      git "checkout #{branch}"
+      checkout!
       commit_all
       git "merge origin/#{branch}"
       push

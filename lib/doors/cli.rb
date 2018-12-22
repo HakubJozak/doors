@@ -18,7 +18,7 @@ class Doors::CLI
     def execute_command!(argv)
       case @command
         when nil, '', 'p', 'print'
-          Doors::Commands::Print.new(argv, @store, @tracker, @config).run!
+          Doors::Commands::Print.new(argv, @store, @tracker, @config, @git).run!
         when 'i', 'in', 'start'
           Doors::Commands::Start.new(argv, @tracker, @config).run!
         when 'o', 'out', 'stop'
