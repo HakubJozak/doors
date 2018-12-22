@@ -1,4 +1,5 @@
 class Doors::Printer
+
   def initialize(store)
     @store = store
     @io = StringIO.new

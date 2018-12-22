@@ -16,7 +16,7 @@ class String
     colorize(34)
   end
 
-  def pink
+  def magenta
     colorize(35)
   end
 
@@ -28,5 +28,5 @@ class String
     def colorize(color_code)
       "\e[#{color_code}m#{self}\e[0m"
     end
-  
+
 end

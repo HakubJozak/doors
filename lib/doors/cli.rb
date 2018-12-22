@@ -1,21 +1,15 @@
-require_relative 'commands/print'
-require_relative 'commands/start'
-
-
 class Doors::CLI
 
   def initialize
     @config  = Doors::Config.new
     @git     = Doors::Git.new(@config)
-    @store   = Doors::Store.new("#{@config.root}/#{project}")
+    @store   = Doors::Store.new(@config)
     @tracker = Doors::Tracker.new(@config, @store)
   end
 
   def run!(argv)
     @command = argv.shift
     execute_command!(argv)
-  rescue Doors::Git::Error => e
-    puts e.message.red
   rescue Doors::Error => e
     puts e.message.red
   end
@@ -24,7 +18,7 @@ class Doors::CLI
     def execute_command!(argv)
       case @command
         when nil, '', 'p', 'print'
-          Doors::Commands::Print.new(argv, @store, @tracker).run!
+          Doors::Commands::Print.new(argv, @store, @tracker, @config).run!
         when 'i', 'in', 'start'
           Doors::Commands::Start.new(argv, @tracker, @config).run!
         when 'o', 'out', 'stop'
@@ -52,12 +46,6 @@ class Doors::CLI
         else
           help
       end
-    end
-
-    def project
-      # File.basename(`pwd`.strip)
-      'inex'
-      'kdm'
     end
 
     def help
