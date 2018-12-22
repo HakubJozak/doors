@@ -1,24 +1,14 @@
 class Doors::Commands::Start
 
-  include Doors::ProjectSelector
-  
-  def initialize(argv, tracker, config)
-    @tracker = tracker
-    @config = config
-    @project = selected_project(argv.first)
+  def initialize(argv, cli)
+    @cli = cli
+    @project_name = argv.first
   end
 
   def run!
-    @tracker.start!
-    write_selected_project!(@project)
-    git.sync!    
+    @cli.tracker.start!
+    @cli.project = @project_name
+    @cli.git.sync!
   end
-
-  private
-
-    def git
-      @git ||= Doors::Git.new(@config)      
-    end
-
 
 end

@@ -1,5 +1,7 @@
 class Doors::CLI
 
+  include Doors::ProjectSelector
+
   def run!(argv)
     @command = argv.shift
     execute_command!(argv)
@@ -7,22 +9,38 @@ class Doors::CLI
     puts e.message.red
   end
 
+  def config
+    @config ||= Doors::Config.new
+  end
+
+  def git
+    @git ||= Doors::Git.new(self)
+  end
+
+  def store
+    @store ||= Doors::Store.new(self)
+  end
+
+  def tracker
+    @tracker ||= Doors::Tracker.new(self)      
+  end
+
   private
     def execute_command!(argv)
       case @command
         when nil, '', 'p', 'print'
-          Doors::Commands::Print.new(argv, @store, @tracker, @config, @git).run!
+          Doors::Commands::Print.new(argv, self).run!
         when 'i', 'in', 'start'
-          Doors::Commands::Start.new(argv, @tracker, @config).run!
+          Doors::Commands::Start.new(argv, self).run!
         when 'o', 'out', 'stop'
-          @git.sync! if @tracker.stop!
+          git.sync! if tracker.stop!
         when 's', 'sync'
-          @git.inline.sync!
+          git.inline.sync!
         when 'h', 'help'
           help
         when 'i3'
           if ENV['BLOCK_BUTTON'].to_s.empty?
-            if @tracker.running?
+            if tracker.running?
               puts "<span color='green'>IN</span>"
             else
               puts "<span color='red'>OUT</span>"
@@ -39,22 +57,6 @@ class Doors::CLI
         else
           help
       end
-    end
-
-    def config
-      @config ||= Doors::Config.new
-    end
-
-    def git
-      @git ||= Doors::Git.new(self)
-    end
-
-    def store
-      @store ||= Doors::Store.new(self)
-    end
-
-    def tracker
-      @tracker ||= Doors::Tracker.new(self)      
     end
 
     def help

@@ -1,25 +1,21 @@
 class Doors::Commands::Print
 
-  include Doors::ProjectSelector
   attr_reader :month
 
   # TODO - pass Doors::CLI object with public methods
-  def initialize(argv, store, tracker, config, git)
-    @store = store
-    @tracker = tracker
-    @config = config
-    @git = git
+  def initialize(argv, cli)
+    @cli = cli
     parse_month!(argv.first)
   end
 
   def run!
-    @git.checkout!
-    puts "   Project: #{selected_project.light_blue}"
+    @cli.git.checkout!
+    puts "   Project: #{@cli.project.light_blue}"
     puts printer.summary(month)
-    puts "        %28s %s" % [ '', @tracker.status ]
+    puts "        %28s %s" % [ '', @cli.tracker.status ]
     puts "   " + "~" * 60
   end
-  
+
   private
     def parse_month!(value)
       @month = case value
@@ -34,11 +30,11 @@ class Doors::Commands::Print
 
     def today
       @today ||= Date.today
-    end    
-
-    def printer
-      @printer ||= Doors::Printer.new(@store)
     end
 
-  
+    def printer
+      @printer ||= Doors::Printer.new(@cli.store)
+    end
+
+
 end

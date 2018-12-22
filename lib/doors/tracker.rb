@@ -6,8 +6,8 @@ require_relative 'entry'
 class Doors::Tracker
 
   def initialize(cli)
+    @cli = cli
     @path = "#{cli.config.root}/running"
-    @store = cli.store
   end
 
   def status
@@ -25,15 +25,15 @@ class Doors::Tracker
     else
       t = Time.now
       File.open(@path,'w') { |f| f.write(t.to_s) }
-      puts "#{t.strftime('%R')} - tracker started."
+      puts "#{t.strftime('%R')} - tracking #{@cli.project} started."
     end
   end
 
   def stop!
     if running?
       e = Doors::Entry.new( nil, from: started, to: Time.now )
-      @store.add(e)
-      @store.save!
+      @cli.store.add(e)
+      @cli.store.save!
       puts "Tracker stopped. Time elapsed: #{duration}"
       system "rm -f #{@path}"
       e
@@ -48,7 +48,6 @@ class Doors::Tracker
   end
 
   private
-
     def started
       @started ||= DateTime.parse File.read(@path)
     end
