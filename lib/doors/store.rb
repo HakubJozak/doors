@@ -1,10 +1,10 @@
 class Doors::Store
 
   include Doors::ProjectSelector
-  
-  def initialize(config)
-    @config = config
-    @root = "#{config.root}/#{selected_project}"
+
+  def initialize(cli)
+    @config = cli.config
+    @root = "#{cli.config.root}/#{selected_project}"
 
     unless Dir.exist?(@root)
       system "mkdir -p #{@root}"

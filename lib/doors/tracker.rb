@@ -5,9 +5,9 @@ require_relative 'entry'
 
 class Doors::Tracker
 
-  def initialize(config, store)
-    @path = "#{config.root}/running"
-    @store = store
+  def initialize(cli)
+    @path = "#{cli.config.root}/running"
+    @store = cli.store
   end
 
   def status

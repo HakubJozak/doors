@@ -19,8 +19,8 @@ class Doors::Git
     end
   end
 
-  def initialize(config)
-    @config = config
+  def initialize(cli)
+    @config = cli.config
     init! unless repo_exists?
   end
 
@@ -39,7 +39,7 @@ class Doors::Git
   end
 
   def checkout!
-    git "checkout #{branch}"    
+    git "checkout #{branch}"
   end
 
   def sync!

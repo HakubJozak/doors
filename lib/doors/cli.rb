@@ -1,12 +1,5 @@
 class Doors::CLI
 
-  def initialize
-    @config  = Doors::Config.new
-    @git     = Doors::Git.new(@config)
-    @store   = Doors::Store.new(@config)
-    @tracker = Doors::Tracker.new(@config, @store)
-  end
-
   def run!(argv)
     @command = argv.shift
     execute_command!(argv)
@@ -46,6 +39,22 @@ class Doors::CLI
         else
           help
       end
+    end
+
+    def config
+      @config ||= Doors::Config.new
+    end
+
+    def git
+      @git ||= Doors::Git.new(self)
+    end
+
+    def store
+      @store ||= Doors::Store.new(self)
+    end
+
+    def tracker
+      @tracker ||= Doors::Tracker.new(self)      
     end
 
     def help
