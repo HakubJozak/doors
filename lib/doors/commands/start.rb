@@ -6,8 +6,8 @@ class Doors::Commands::Start
   end
 
   def run!
-    @cli.tracker.start!
     @cli.project = @project_name
+    @cli.tracker.start!
     @cli.git.sync!
   end
 

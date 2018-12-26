@@ -1,3 +1,6 @@
+require 'active_support/core_ext/object/blank'
+
+
 module Doors
   class Error < RuntimeError ; end
 
@@ -23,5 +26,3 @@ require_relative 'doors/printer'
 
 require_relative 'doors/commands/print'
 require_relative 'doors/commands/start'
-
-

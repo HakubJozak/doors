@@ -12,7 +12,7 @@ class Doors::Tracker
 
   def status
     if running?
-      "Tracker running #{duration}"
+      "Running #{@cli.project.light_blue} #{duration}"
     else
       "Tracker is not running."
     end
@@ -25,7 +25,7 @@ class Doors::Tracker
     else
       t = Time.now
       File.open(@path,'w') { |f| f.write(t.to_s) }
-      puts "#{t.strftime('%R')} - tracking #{@cli.project} started."
+      puts "#{t.strftime('%R')} - tracking #{@cli.project}"
     end
   end
 
@@ -34,7 +34,7 @@ class Doors::Tracker
       e = Doors::Entry.new( nil, from: started, to: Time.now )
       @cli.store.add(e)
       @cli.store.save!
-      puts "Tracker stopped. Time elapsed: #{duration}"
+      puts "#{@cli.project.light_blue} stopped. Time elapsed: #{duration}"
       system "rm -f #{@path}"
       e
     else

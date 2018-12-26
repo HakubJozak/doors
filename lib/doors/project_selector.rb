@@ -1,7 +1,7 @@
 module Doors::ProjectSelector
 
   def project=(str)
-    return if str.empty?
+    return unless str.present?
     @project = str
     write_last_project!
     str
@@ -10,14 +10,16 @@ module Doors::ProjectSelector
   def project
     @project ||
       last_project ||
-      fail(Doors::Error.new("No project selected."))    
+      no_project_error!
   end
 
-  
-
   private
+    def no_project_error!
+      fail(Doors::Error.new("No project selected."))
+    end
+
     def last_project
-      File.read(last_file).strip if File.exist?(last_file)
+      File.read(last_file).presence if File.exist?(last_file)
     end
 
     def write_last_project!
