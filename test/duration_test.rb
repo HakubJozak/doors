@@ -18,5 +18,5 @@ class DurationTest < Minitest::Test
     assert_equal 1, d.hours
     assert_equal 3604, d.to_i
   end
-  
+
 end

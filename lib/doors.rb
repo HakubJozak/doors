@@ -4,8 +4,8 @@ require 'active_support/core_ext/object/blank'
 module Doors
   class Error < RuntimeError ; end
 
-  module Commands
-  end
+  module Commands ; end
+  module Formatters ; end
 end
 
 
@@ -23,6 +23,9 @@ require_relative 'doors/cli'
 require_relative 'doors/store'
 require_relative 'doors/git'
 require_relative 'doors/printer'
+require_relative 'doors/reporter'
 
 require_relative 'doors/commands/print'
 require_relative 'doors/commands/start'
+
+require_relative 'doors/formatters/day'

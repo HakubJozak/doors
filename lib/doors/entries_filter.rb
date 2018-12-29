@@ -9,7 +9,7 @@ class Doors::EntriesFilter
 
     @store.entries.select { |e|
       e.date > limit
-    }        
+    }
   end
 
   def by_month(month)
@@ -18,10 +18,5 @@ class Doors::EntriesFilter
         e.date.year  == month.year
     }
   end
-
-
-  
-  
-
 
 end

@@ -30,8 +30,11 @@ class Doors::Entry
   end
 
   private
-
     def set_times(info)
+      if [ info['in'], info['out'], info['duration'] ].all?(&:blank?)
+        fail "Blank entry info #{info.inspect}"
+      end
+      
       @in = create_time( info['in'] )
       @out = create_time( info['out'] )
       @duration = Doors::Duration.parse( info['duration'] )
@@ -60,6 +63,6 @@ class Doors::Entry
       array.push(0) while array.size < 2
       array
     end
-    
+
 
 end

@@ -22,7 +22,7 @@ class Doors::CLI
   end
 
   def tracker
-    @tracker ||= Doors::Tracker.new(self)      
+    @tracker ||= Doors::Tracker.new(self)
   end
 
   private
@@ -30,6 +30,10 @@ class Doors::CLI
       case @command
         when nil, '', 'p', 'print'
           Doors::Commands::Print.new(argv, self).run!
+        when nil, '', 'r', 'report'
+          r = Doors::Reporter.new(self)
+          puts r.projects.inspect
+          puts r.entries.inspect
         when 'i', 'in', 'start'
           Doors::Commands::Start.new(argv, self).run!
         when 'o', 'out', 'stop'

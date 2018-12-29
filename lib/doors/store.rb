@@ -99,14 +99,4 @@ class Doors::Store
       end
     end
 
-    # Example:
-    #
-    #  ~/time/october_2018.yml
-    #
-    def path_for(d = Date.today)
-      month = d.strftime('%B').downcase
-    end
-
-
-
 end
