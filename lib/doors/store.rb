@@ -10,7 +10,7 @@ class Doors::Store
   end
 
   def filter
-    @filter ||= Doors::EntriesFilter.new(self)
+    @filter ||= Doors::EntriesFilter.new(entries)
   end
 
   def add(entry)
@@ -20,6 +20,7 @@ class Doors::Store
   def save!
     to_hash.each do |year,months|
       months.each do |month,days|
+        # TODO: merge with Doors::Reporter#path_for
         path = "#{@root}/#{year}_#{month}.yml"
 
         File.open( path,"w") { |f|
@@ -49,20 +50,6 @@ class Doors::Store
 
     out
   end
-
-
-  # def serialize
-  #   days = {}
-
-  #   entries.group_by(&:date).each do |day, es|
-  #     key = day.strftime('%d_%A').downcase
-  #     days[key] = es.map { |e| serialize_entry(e) }
-  #   end
-
-  #   d = entries.first.date
-  #   month = d.strftime('%B').downcase
-  #   serialized = { d.year.to_i => { month => days }}
-  # end
 
   def entries
     @entries ||= load!

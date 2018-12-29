@@ -2,10 +2,12 @@ class Doors::Entry
 
   include Doors::TimeOps
 
-  attr_accessor :in, :out, :duration
+  attr_accessor :in, :out, :duration, :project
 
   # TODO: refactor and merge with ^
   def initialize( date, info = {} )
+    @project = info['project']
+
     if date.is_a? Time
       @date = [ date.year, date.month, date.day ]
       @in = date

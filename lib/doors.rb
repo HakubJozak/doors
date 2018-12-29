@@ -29,3 +29,4 @@ require_relative 'doors/commands/print'
 require_relative 'doors/commands/start'
 
 require_relative 'doors/formatters/day'
+require_relative 'doors/summary'

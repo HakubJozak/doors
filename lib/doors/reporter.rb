@@ -1,6 +1,6 @@
 class Doors::Reporter
 
-  attr_reader :entries
+  attr_reader :sums
 
   def initialize(cli)
     @cli = cli
@@ -8,18 +8,25 @@ class Doors::Reporter
     load_entries!
   end
 
+  def entries
+    @filter ||= Doors::EntriesFilter.new(@entries)
+  end
+
   #private
     def load_entries!
-      @entries = {}
+      @sums = {}
       this_month = Date.today
       last_month = this_month << 1
 
-      projects.each do |project|
-        @entries[project] = [ last_month, this_month ].map do |month|
+      @entries = [ last_month, this_month ].map do |month|
+        entries = projects.map do |project|
           file = path_for(project, month)
-          parser.load(file)
-        end.flatten.compact
-      end
+          parser.load(file, project)
+        end.flatten
+
+        @sums[month] = Doors::Summary.new(entries)
+        entries
+      end.flatten.compact
     end
 
     # Example:

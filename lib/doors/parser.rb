@@ -2,18 +2,19 @@ class Doors::Parser
 
   include Doors::TimeOps
 
-  def load(path)
-    return unless File.exist?(path)
+  def load(path, project = nil)
+    return [] unless File.exist?(path)
 
     years = YAML.load_file(path) || {}
     result = []
+    @project = project
 
     years.each do |year,months|
       months.each do |name,days|
         month = to_month(name)
 
         days.each do |day,entries|
-          date = [ year, month, day.to_i ]
+          @date = [ year, month, day.to_i ]
 
           if entries.nil? || entries.empty?
             next
@@ -22,16 +23,18 @@ class Doors::Parser
           entries.map do |e|
             result << case e
                       when Integer, Float
-                        Doors::Entry.new(date, 'duration' => e)
+                        create_entry('duration' => e)
                       when String
                         if e.include? '-'
                           a, b = e.split('-')
-                          Doors::Entry.new(date, 'in' => a, 'out' => b)
+                          create_entry('in' => a, 'out' => b)
                         else
-                          Doors::Entry.new(date, 'duration' => e)
+                          create_entry('duration' => e)
                         end
+                      when Hash
+                        create_entry(e)
                       else
-                        Doors::Entry.new(date, e)
+                        fail "Unrecognized entry format #{e.inspect}"
                       end
           end
         end
@@ -42,6 +45,9 @@ class Doors::Parser
   end
 
   private
+    def create_entry(info)
+      Doors::Entry.new(@date, info.merge('project' => @project))
+    end
 
     def to_month(val)
       m = DateTime.strptime(val.to_s, '%B').month

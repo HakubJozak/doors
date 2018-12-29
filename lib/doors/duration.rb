@@ -17,7 +17,7 @@ class Doors::Duration
       # single number is 'hours'
       new(val,0,0)
     when Float
-      # float is hours.minutes, 
+      # float is hours.minutes,
       hour = val.floor
       new(hour, (val - hour) * 100)
     when /:/
@@ -32,7 +32,7 @@ class Doors::Duration
       fail "Unrecognized duration #{val}"
     end
   end
-  
+
   def +(other)
     self.class.new(total: self.to_i + other.to_i)
   end
