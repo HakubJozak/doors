@@ -9,11 +9,12 @@ class Doors::Printer2
   end
 
   def as_table
-    top
-    @summaries
-      .map  { |s| s.as_table_row(projects) }
-      .each { |s| @io.puts(s) }
-    bottom
+    lines = @summaries.map  { |s| s.as_table_row(projects) }
+    size = lines.first.size
+
+    top(size)
+    lines.each { |s| @io.puts(s) }
+    bottom(size)
     @io.string
     # @details.map(&:print) ].compact.flatten.join("\n")
   end
@@ -24,15 +25,15 @@ class Doors::Printer2
       [ 'kdm', 'inex', 'facility', 'doors' ]
     end
   
-    def bottom
-      @io.puts '\_________________________________________________________________/'
+    def bottom(size)
+      @io.puts "\\#{ '_' * (size - 2) }/"
     end
 
-    def hr
-      @io.puts '|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|'
+    def hr(size)
+      @io.puts "|#{ '~' * (size - 2) }|"
     end
 
-    def top
-      @io.puts '.-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-.'
+    def top(size)
+      @io.puts ".#{ '~-' * (size - 2).div(2) }."
     end
 end
