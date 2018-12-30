@@ -35,11 +35,11 @@ class Doors::Reporter
       last_month = this_month << 1
 
       @summaries = []
-      @summaries << Doors::Summary.new('Last month') { |entry|
+      @summaries << Doors::Summary.new(last_month.strftime('%B %Y')) { |entry|
         entry.in_month?(last_month)
       }
 
-      @summaries << Doors::Summary.new('This month') { |entry|
+      @summaries << Doors::Summary.new(this_month.strftime('%B %Y')) { |entry|
         entry.in_month?(this_month)
       }
 

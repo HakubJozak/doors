@@ -17,12 +17,13 @@ class Doors::Summary
     @projects.values.sum
   end
 
+  # Result:
   #
   # '|   October   2018  | 00:00:01 | 00:00:01 | 00:00:01  | 20:13:00  |'
   #
   def as_table_row(projects)
     sums = projects.map { |p| @projects[p] || '-' }
-    "| %s #{ '| %10s  ' * projects.size  }| %10s |" %
+    "| %14s #{ '| %10s  ' * projects.size  }| %10s |" %
       [ @name, sums, total ].flatten
   end
 
