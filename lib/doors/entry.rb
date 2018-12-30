@@ -27,6 +27,11 @@ class Doors::Entry
     end
   end
 
+  def in_month?(month)
+    date.month == month.month &&
+      date.year  == month.year    
+  end
+
   def date
     Date.new(*@date)
   end

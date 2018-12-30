@@ -32,7 +32,7 @@ class Doors::CLI
           Doors::Commands::Print.new(argv, self).run!
         when nil, '', 'r', 'report'
           r = Doors::Reporter.new(self)
-          puts r.sums.values.last.to_s
+          puts r.summaries
         when 'i', 'in', 'start'
           Doors::Commands::Start.new(argv, self).run!
         when 'o', 'out', 'stop'

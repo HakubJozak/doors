@@ -1,6 +1,8 @@
 class Doors::Summary
-  def initialize(entries)
-    compute! entries
+  def initialize(name, &condition)
+    @condition = condition
+    @projects = {}
+    @name = name
   end
   
   def [](project)
@@ -15,19 +17,27 @@ class Doors::Summary
     @projects.values.sum
   end
 
+  def update(entries)
+    entries.each do |e|
+      next unless @condition.call(e)
+      @projects[e.project] ||= 0
+      @projects[e.project] += e.duration
+    end    
+  end
+
   def to_s
-    @projects.each_pair.map { |date,dur|
+    vals = @projects.each_pair.map { |date,dur|
       "#{date}: #{dur}"
-    }.to_s
+    }.join(', ')
+
+    [ @name, vals ].join(': ')
   end
 
   private
-    def compute!(entries)
-      @projects = {}
-
-      entries.each do |e|
-        @projects[e.project] ||= 0
-        @projects[e.project] += e.duration
-      end
-    end
+    # def compute!(entries)
+    #   entries.each do |e|
+    #     @projects[e.project] ||= 0
+    #     @projects[e.project] += e.duration
+    #   end
+    # end
 end
