@@ -30,3 +30,5 @@ require_relative 'doors/commands/start'
 
 require_relative 'doors/formatters/day'
 require_relative 'doors/summary'
+require_relative 'doors/day_summary'
+require_relative 'doors/printer2'

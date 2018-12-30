@@ -32,7 +32,8 @@ class Doors::CLI
           Doors::Commands::Print.new(argv, self).run!
         when nil, '', 'r', 'report'
           r = Doors::Reporter.new(self)
-          puts r.summaries
+          p = Doors::Printer2.new(r.summaries, r.details)
+          puts p.as_table
         when 'i', 'in', 'start'
           Doors::Commands::Start.new(argv, self).run!
         when 'o', 'out', 'stop'

@@ -1,6 +1,6 @@
 class Doors::Reporter
 
-  attr_reader :summaries
+  attr_reader :summaries, :details
 
   def initialize(cli)
     @cli = cli
@@ -23,12 +23,14 @@ class Doors::Reporter
           file = path_for(project, month)
           parser.load(file, project)
         end.flatten
-        
-        update_summaries!(entries)
+
+        notify_listeners!(entries)
       end.flatten.compact
     end
 
     def create_summaries!
+      today = Date.today
+      yesterday = today - 1
       this_month = Date.today
       last_month = this_month << 1
 
@@ -39,7 +41,11 @@ class Doors::Reporter
 
       @summaries << Doors::Summary.new('This month') { |entry|
         entry.in_month?(this_month)
-      }            
+      }
+
+      @details = []
+      @details << Doors::DaySummary.new(yesterday)
+      @details << Doors::DaySummary.new(today)      
     end
 
     # Example:
@@ -50,10 +56,11 @@ class Doors::Reporter
       month = d.strftime("#{@root}/#{project}/%Y_%B.yml").downcase
     end
 
-    def update_summaries!(entries)
+    def notify_listeners!(entries)
       @summaries.each { |s| s.update(entries) }
+      @details.each { |s| s.update(entries) }      
     end
-    
+
     def projects
       @projects ||= Dir["#{@root}/*"].map { |f|
         File.basename(f) if File.directory?(f)
@@ -64,6 +71,4 @@ class Doors::Reporter
       @parser ||= Doors::Parser.new
     end
 
-
-  
 end
