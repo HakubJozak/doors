@@ -18,7 +18,7 @@ class Doors::SummaryTable
       line,
       @lines,
       bottom
-    ]
+    ].flatten
   end
 
   private

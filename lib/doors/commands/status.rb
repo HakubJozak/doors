@@ -13,7 +13,7 @@ class Doors::Commands::Status
       Doors::Summary.new(month)
     end
 
-    @days =  [ @today , @today << 1 ].map do |day|
+    @days =  [ @today - 1 , @today ].map do |day|
       Doors::DaySummary.new(day)
     end
 

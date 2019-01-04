@@ -1,9 +1,7 @@
 module AsciiPen
 
   def text
-    @io = StringIO.new
-    components.each { |s| @io.puts(s) }
-    @io.string    
+    components.flatten.join("\n")
   end
 
   def width
