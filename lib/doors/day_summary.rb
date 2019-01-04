@@ -5,15 +5,14 @@ class Doors::DaySummary
     @entries = []
   end
 
-  def update(entries)
-    entries.each do |e|
-      @entries << e if e.date == @date
-    end  
+  def insert(entry)
+    return unless entry.date == @date
+    @entries << entry 
   end
 
   def print
     " day_summary "
   end
 
-  
+
 end

@@ -1,7 +1,5 @@
 class Doors::Loader
 
-  attr_reader :summaries, :details
-
   def initialize(cli)
     @cli = cli
     @root = cli.config.root
@@ -35,7 +33,11 @@ class Doors::Loader
     end
 
     def notify_listeners!(entries)
-      @listeners.each { |s| s.update(entries) }
+      @listeners.each do |l|
+        entries.each do |e|
+          l.insert(e) 
+        end
+      end
     end
 
     def projects

@@ -4,35 +4,24 @@ class Doors::SummaryTable
 
   include AsciiPen
 
-  def initialize(summaries)
+  attr_reader :projects
+
+  def initialize(summaries, projects)
+    @projects = projects
     @lines = summaries.map  { |s| row(s) }
   end
 
-  def text
-    @io = StringIO.new
-
-    components = [
+  def components
+    [
       top,
       header,
-      horizontal_line,
+      line,
       @lines,
       bottom
     ]
-
-    components.each { |s| @io.puts(s) }
-    @io.string
   end
 
   private
-    # TODO: merge with Reporter#projects
-    def projects
-      [ 'kdm', 'inex', 'facility', 'doors' ]
-    end
-
-    def width
-      @width ||= @lines.map(&:size).max
-    end
-
     # Result:
     #
     # '|   October   2018  | 00:00:01 | 00:00:01 | 00:00:01  | 20:13:00  |'
@@ -46,7 +35,7 @@ class Doors::SummaryTable
     # |     SUMMARY       |  inex    |    kdm   |  doors    |   TOTAL   |
     def header
       "| %14s #{ '| %10s  ' * projects.size  }| %10s |" %
-        [ 'SUMMARY', projects, 'TOTAL' ].flatten
+        [ 'SUMMARY', projects.to_a, 'TOTAL' ].flatten
     end
 
 end
