@@ -2,19 +2,21 @@ require 'stringio'
 
 class Doors::SummaryTable
 
+  include AsciiPen
+
   def initialize(summaries)
-    @lines = summaries.map  { |s| s.as_table_row(projects) }
+    @lines = summaries.map  { |s| row(s) }
   end
 
   def text
     @io = StringIO.new
 
     components = [
-      top(size),
+      top,
       header,
-      horizontal_line(size),
+      horizontal_line,
       @lines,
-      bottom(size)
+      bottom
     ]
 
     components.each { |s| @io.puts(s) }
@@ -27,8 +29,18 @@ class Doors::SummaryTable
       [ 'kdm', 'inex', 'facility', 'doors' ]
     end
 
-    def size
-      @size ||= @lines.map(&:size).max
+    def width
+      @width ||= @lines.map(&:size).max
+    end
+
+    # Result:
+    #
+    # '|   October   2018  | 00:00:01 | 00:00:01 | 00:00:01  | 20:13:00  |'
+    #
+    def row(summary)
+      sums = projects.map { |p| summary[p] || '-' }
+      "| %14s #{ '| %10s  ' * projects.size  }| %10s |" %
+        [ summary.name, sums, summary.total ].flatten
     end
 
     # |     SUMMARY       |  inex    |    kdm   |  doors    |   TOTAL   |
@@ -37,15 +49,4 @@ class Doors::SummaryTable
         [ 'SUMMARY', projects, 'TOTAL' ].flatten
     end
 
-    def bottom(size)
-      "\\#{ '_' * (size - 2) }/"
-    end
-
-    def horizontal_line(size)
-      "|#{ '-' * (size - 2) }|"
-    end
-
-    def top(size)
-      ".#{ '~' * (size - 2) }."
-    end
 end

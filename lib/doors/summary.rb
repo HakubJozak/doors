@@ -9,7 +9,7 @@ class Doors::Summary
     if @projects.has_key?(project)
       @projects[project]
     else
-      0
+      nil
     end
   end
 
@@ -23,16 +23,6 @@ class Doors::Summary
 
   def total
     @projects.values.sum
-  end
-
-  # Result:
-  #
-  # '|   October   2018  | 00:00:01 | 00:00:01 | 00:00:01  | 20:13:00  |'
-  #
-  def as_table_row(projects)
-    sums = projects.map { |p| @projects[p] || '-' }
-    "| %14s #{ '| %10s  ' * projects.size  }| %10s |" %
-      [ name, sums, total ].flatten
   end
 
   def update(entries)

@@ -34,5 +34,7 @@ require_relative 'doors/summary'
 require_relative 'doors/day_summary'
 
 
+require_relative 'doors/ascii_pen'
 require_relative 'doors/summary_table'
 require_relative 'doors/recent_table'
+
