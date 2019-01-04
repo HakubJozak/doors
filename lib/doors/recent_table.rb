@@ -65,14 +65,17 @@ class Doors::RecentTable
       today = Date.today
 
       str = if record.date == today
-        '[today]'
-      elsif record.date == today - 1
-        '[yesterday]'
-      else
-        nil
-      end
+              color = :light_green
+              '[today]'
+            elsif record.date == today - 1
+              color = :gray
+              '[yesterday]'
+            else
+              color = :red
+              nil
+            end
 
-      "%10s %12s " % [ str, ' ' ]
+      ("%11s %12s " % [ str, '  ' ]).public_send(color)
     end
 
     def time(val)

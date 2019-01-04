@@ -24,6 +24,14 @@ class String
     colorize(36)
   end
 
+  def gray
+    colorize(37)
+  end
+
+  def light_green
+    colorize(92)
+  end
+
   private
     def colorize(color_code)
       "\e[#{color_code}m#{self}\e[0m"
