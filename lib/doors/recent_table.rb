@@ -1,9 +1,8 @@
 require 'stringio'
 
-class Doors::Printer2
+class Doors::RecentTable
 
-  def initialize(summaries, days)
-    @summaries = summaries
+  def initialize(days)
     @days = days
     @io = StringIO.new
   end
@@ -17,8 +16,8 @@ class Doors::Printer2
     horizontal_line(size)
     lines.each { |s| @io.puts(s) }
     bottom(size)
+
     @io.string
-    # @details.map(&:print) ].compact.flatten.join("\n")
   end
 
   private
@@ -32,7 +31,7 @@ class Doors::Printer2
       @io.puts "| %14s #{ '| %10s  ' * projects.size  }| %10s |" %
         [ 'SUMMARY', projects, 'TOTAL' ].flatten
     end
-  
+
     def bottom(size)
       @io.puts "\\#{ '_' * (size - 2) }/"
     end

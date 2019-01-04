@@ -1,16 +1,24 @@
 class Doors::Summary
-  def initialize(name, &condition)
-    @condition = condition
+
+  def initialize(month)
     @projects = {}
-    @name = name
+    @month = month
   end
-  
+
   def [](project)
     if @projects.has_key?(project)
       @projects[project]
     else
       0
     end
+  end
+
+  def accepts?(entry)
+    entry.in_month?(@month)
+  end
+
+  def name
+    @month.strftime('%B %Y')
   end
 
   def total
@@ -24,15 +32,15 @@ class Doors::Summary
   def as_table_row(projects)
     sums = projects.map { |p| @projects[p] || '-' }
     "| %14s #{ '| %10s  ' * projects.size  }| %10s |" %
-      [ @name, sums, total ].flatten
+      [ name, sums, total ].flatten
   end
 
   def update(entries)
     entries.each do |e|
-      next unless @condition.call(e)
+      next unless accepts?(e)
       @projects[e.project] ||= 0
       @projects[e.project] += e.duration
-    end    
+    end
   end
 
   def to_s
@@ -40,14 +48,7 @@ class Doors::Summary
       "#{date}: #{dur}"
     }.join(', ')
 
-    [ @name, vals ].join(': ')
+    [ name, vals ].join(': ')
   end
 
-  private
-    # def compute!(entries)
-    #   entries.each do |e|
-    #     @projects[e.project] ||= 0
-    #     @projects[e.project] += e.duration
-    #   end
-    # end
 end

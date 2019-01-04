@@ -23,12 +23,16 @@ require_relative 'doors/cli'
 require_relative 'doors/store'
 require_relative 'doors/git'
 require_relative 'doors/printer'
-require_relative 'doors/reporter'
+require_relative 'doors/loader'
 
 require_relative 'doors/commands/print'
 require_relative 'doors/commands/start'
+require_relative 'doors/commands/status'
 
 require_relative 'doors/formatters/day'
 require_relative 'doors/summary'
 require_relative 'doors/day_summary'
-require_relative 'doors/printer2'
+
+
+require_relative 'doors/summary_table'
+require_relative 'doors/recent_table'
