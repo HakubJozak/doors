@@ -1,6 +1,7 @@
 require 'date'
 require 'yaml'
 require_relative 'entry'
+require_relative 'ascii_pen'
 
 
 class Doors::Tracker

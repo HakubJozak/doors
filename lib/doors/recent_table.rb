@@ -5,7 +5,7 @@ class Doors::RecentTable
   include AsciiPen
 
   attr_reader :projects
-  
+
   def initialize(days, projects)
     @projects = projects
     @lines = days.map { |d| [ day(d), line ] }
@@ -15,14 +15,13 @@ class Doors::RecentTable
     [
       top,
       @lines,
-      bottom
     ].flatten
   end
 
   def width
     67
   end
-  
+
   private
     # Examples
     #
@@ -33,10 +32,10 @@ class Doors::RecentTable
     #
     def day(record)
       return empty_day(record) if record.entries.empty?
-      
+
       record.entries.map.with_index do |entry,i|
         label = date_and_total(record) if i == 0
-        label = tag(record) if i == 1          
+        label = tag(record) if i == 1
 
         "| %25s | %8s | %13s | %8s |" %
           [ label,
@@ -82,5 +81,5 @@ class Doors::RecentTable
       return if val.nil?
       val.strftime("%H:%M")
     end
-    
+
 end
