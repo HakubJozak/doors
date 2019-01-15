@@ -56,6 +56,8 @@ class Doors::CLI
             #   @git.sync!
             # end
           end
+
+          $stdout.flush
         else
           help
       end

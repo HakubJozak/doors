@@ -1,4 +1,7 @@
-#!/usr/bin/env ruby
+#!/home/jakub/.rvm/gems/ruby-2.5.3/wrappers/ruby
+
+require 'rubygems'
+require 'bundler/setup'
 
 require_relative '../lib/doors.rb'
 
