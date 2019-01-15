@@ -26,7 +26,7 @@ class Doors::Parser
                         create_entry('duration' => e)
                       when String
                         if e.include? '-'
-                          a, b = e.split('-')
+                          a, b = e.split('-').map(&:strip)
                           create_entry('in' => a, 'out' => b)
                         else
                           create_entry('duration' => e)

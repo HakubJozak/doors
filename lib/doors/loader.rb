@@ -35,7 +35,7 @@ class Doors::Loader
     def notify_listeners!(entries)
       @listeners.each do |l|
         entries.each do |e|
-          l.insert(e) 
+          l.insert(e)
         end
       end
     end

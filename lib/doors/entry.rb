@@ -29,7 +29,7 @@ class Doors::Entry
 
   def in_month?(month)
     date.month == month.month &&
-      date.year  == month.year    
+      date.year  == month.year
   end
 
   def date
@@ -41,12 +41,18 @@ class Doors::Entry
       if [ info['in'], info['out'], info['duration'] ].all?(&:blank?)
         fail "Blank entry info #{info.inspect}"
       end
-      
+
       @in = create_time( info['in'] )
       @out = create_time( info['out'] )
       @duration = Doors::Duration.parse( info['duration'] )
 
       if @in && @out && @duration.nil?
+        if @out < @in
+          # we overlapped over midnight,
+          # add 1 day
+          @out += 3600 * 24
+        end
+        
         @duration = Doors::Duration.new(total: (@out - @in).floor)
       end
     end
