@@ -5,7 +5,7 @@ class Doors::Store
   def initialize(cli)
     @cli = cli
     @project = cli.project
-    @root = "#{cli.config.root}/#{project}"
+    @root = "#{cli.config.root}/#{@project}"
 
     unless Dir.exist?(@root)
       system "mkdir -p #{@root}"
@@ -23,7 +23,10 @@ class Doors::Store
   def save!
     to_hash.each do |year,months|
       months.each do |month,days|
-        File.open( path_for(@project, year: year, month: month)) { |f|
+        path = path_for(@project, year: year, month: month)
+        full = "#{@cli.config.root}/#{path}"
+
+        File.open( full, 'w' ) { |f|
           data = { year => { month => days }}
           f.write(data.to_yaml)
         }

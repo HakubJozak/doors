@@ -12,7 +12,7 @@ class Doors::Loader
     @entries = months.map do |month|
       entries = projects.map do |project|
         file = path_for(project, date: month)
-        parser.load(file, project)
+        parser.load("#{@root}/#{file}", project)
       end.flatten
 
       notify_listeners!(entries)

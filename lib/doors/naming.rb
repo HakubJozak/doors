@@ -4,7 +4,7 @@ module Doors::Naming
   #
   #  ~/time/kdm/october_2018.yml
   #
-  def path_for(project, date: Date.today)
+  def path_for(project, date: Date.today, year: nil, month: nil)
     d = if date
           date
         elsif
@@ -13,9 +13,8 @@ module Doors::Naming
           fail ArgumentError.new("month and year or date must be set")
         end
 
-    d
-      .strftime("#{@root}/#{project}/%Y_%B.yml")
-      .downcase
+    d.strftime("#{project}/%Y_%B.yml")
+     .downcase
   end
 
 
