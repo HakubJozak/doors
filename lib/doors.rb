@@ -9,6 +9,7 @@ module Doors
 end
 
 
+require_relative 'doors/naming'
 require_relative 'doors/config'
 require_relative 'doors/duration'
 require_relative 'doors/time_ops'

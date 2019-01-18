@@ -1,5 +1,7 @@
 class Doors::Loader
 
+  include Doors::Naming
+
   def initialize(cli)
     @cli = cli
     @root = cli.config.root
@@ -9,7 +11,7 @@ class Doors::Loader
   def load_months!(*months)
     @entries = months.map do |month|
       entries = projects.map do |project|
-        file = path_for(project, month)
+        file = path_for(project, date: month)
         parser.load(file, project)
       end.flatten
 
@@ -24,13 +26,6 @@ class Doors::Loader
   end
 
   private
-    # Example:
-    #
-    #  ~/time/kdm/october_2018.yml
-    #
-    def path_for(project, d = Date.today)
-      month = d.strftime("#{@root}/#{project}/%Y_%B.yml").downcase
-    end
 
     def notify_listeners!(entries)
       @listeners.each do |l|

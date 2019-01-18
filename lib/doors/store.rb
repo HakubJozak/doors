@@ -1,8 +1,11 @@
 class Doors::Store
 
+  include Doors::Naming
+
   def initialize(cli)
     @cli = cli
-    @root = "#{cli.config.root}/#{cli.project}"
+    @project = cli.project
+    @root = "#{cli.config.root}/#{project}"
 
     unless Dir.exist?(@root)
       system "mkdir -p #{@root}"
@@ -20,14 +23,10 @@ class Doors::Store
   def save!
     to_hash.each do |year,months|
       months.each do |month,days|
-        # TODO: merge with Doors::Reporter#path_for
-        path = "#{@root}/#{year}_#{month}.yml"
-
-        File.open( path,"w") { |f|
+        File.open( path_for(@project, year: year, month: month)) { |f|
           data = { year => { month => days }}
           f.write(data.to_yaml)
         }
-
       end
     end
   end

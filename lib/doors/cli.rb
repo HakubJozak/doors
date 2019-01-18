@@ -1,6 +1,7 @@
 class Doors::CLI
 
   include Doors::ProjectSelector
+  include Doors::Naming
 
   def run!(argv)
     @command = argv.shift
@@ -36,11 +37,20 @@ class Doors::CLI
           Doors::Commands::Start.new(argv, self).run!
         when 'o', 'out', 'stop'
           git.sync! if tracker.stop!
+        when 'e', 'edit', ''
+          # TODO - Extract to command
+          editor = ENV['EDITOR']
+          path   = path_for(project, date: Date.today)
+          full   = "#{config.root}/#{path}"
+
+          puts "Opening #{full.green}"
+          system "#{editor} #{full} &"
         when 's', 'sync'
           git.inline.sync!
         when 'h', 'help'
           help
         when 'i3'
+          # TODO - Extract to command
           if ENV['BLOCK_BUTTON'].to_s.empty?
             if tracker.running?
               puts "<span color='green'>IN</span>"
