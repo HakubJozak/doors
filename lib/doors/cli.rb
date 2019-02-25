@@ -3,8 +3,8 @@ class Doors::CLI
   include Doors::ProjectSelector
 
   def run!(argv)
-    @command = argv.shift
-    execute_command!(argv)
+    command = create_command_object(argv.shift, argv)
+    command.call
   rescue Doors::Error => e
     puts e.message.red
   end
@@ -26,41 +26,24 @@ class Doors::CLI
   end
 
   private
-    def execute_command!(argv)
-      case @command
-        # when nil, '', 'p', 'print'
-        #   Doors::Commands::Print.new(argv, self).run!
-        when nil, 'p', 'print'
-          Doors::Commands::Status.new(self).run!
-        when 'i', 'in', 'start'
-          Doors::Commands::Start.new(argv, self).run!
-        when 'o', 'out', 'stop'
-          git.sync! if tracker.stop!
-        when 's', 'sync'
-          git.inline.sync!
-        when 'h', 'help'
-          help
-        when 'i3'
-          if ENV['BLOCK_BUTTON'].to_s.empty?
-            if tracker.running?
-              puts "<span color='green'>IN</span>"
+    def create_command_object(name, args)
+      cmd = case name
+            when nil, 'p', 'print'
+              Doors::Commands::Status.new(self)
+            when 'i', 'in', 'start'
+              Doors::Commands::Start.new(args, self)
+            when 'o', 'out', 'stop'
+              Proc.new { git.sync! if tracker.stop! }
+            when 's', 'sync'
+              Proc.new { git.inline.sync! }
+            when 'h', 'help'
+              Proc.new { puts help }
+            when 'i3'
+              Doors::Commands::I3.new(self)
             else
-              puts "<span color='red'>OUT</span>"
+              Proc.new { help }
             end
-          else
-            puts 'Click!'
-            # if @tracker.running?
-            #   @git.sync! if @tracker.stop!
-            # else
-            #   @tracker.start!
-            #   @git.sync!
-            # end
-          end
 
-          $stdout.flush
-        else
-          help
-      end
     end
 
     def help

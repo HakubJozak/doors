@@ -5,7 +5,7 @@ class Doors::Commands::Start
     @project_name = argv.first
   end
 
-  def run!
+  def call
     @cli.project = @project_name
     @cli.tracker.start!
     @cli.git.sync!

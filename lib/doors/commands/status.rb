@@ -8,7 +8,7 @@ class Doors::Commands::Status
   end
 
 
-  def run!
+  def call
     @summaries = [ @today << 1, @today ].map do |month|
       Doors::Summary.new(month)
     end

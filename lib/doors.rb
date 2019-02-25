@@ -28,6 +28,7 @@ require_relative 'doors/loader'
 require_relative 'doors/commands/print'
 require_relative 'doors/commands/start'
 require_relative 'doors/commands/status'
+require_relative 'doors/commands/i3'
 
 require_relative 'doors/formatters/day'
 require_relative 'doors/summary'
