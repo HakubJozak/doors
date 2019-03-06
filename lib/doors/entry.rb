@@ -52,7 +52,7 @@ class Doors::Entry
           # add 1 day
           @out += 3600 * 24
         end
-        
+
         @duration = Doors::Duration.new(total: (@out - @in).floor)
       end
     end
