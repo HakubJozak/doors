@@ -14,7 +14,7 @@ class Doors::Parser
         month = to_month(name)
 
         days.each do |day,entries|
-          @date = [ year, month, day.to_i ]
+          date = [ year, month, day.to_i ]
 
           if entries.nil? || entries.empty?
             next
@@ -23,16 +23,11 @@ class Doors::Parser
           entries.map do |e|
             result << case e
                       when Integer, Float
-                        create_entry('duration' => e)
+                        create_entry(date, 'duration' => e)
                       when String
-                        if e.include? '-'
-                          a, b = e.split('-').map(&:strip)
-                          create_entry('in' => a, 'out' => b)
-                        else
-                          create_entry('duration' => e)
-                        end
+                        parse_entry(date, e, project: @project)
                       when Hash
-                        create_entry(e)
+                        create_entry(date, e)
                       else
                         fail "Unrecognized entry format #{e.inspect}"
                       end
@@ -44,9 +39,39 @@ class Doors::Parser
     result
   end
 
+  # 10m
+  #  2h
+  #  3h 20m
+  REG_HOURS = /(?<hours>\d+)h/  
+
+  REG_MINS  = /(?<minutes>\d+)m/  
+
+  REG_SHORT  = /#{REG_HOURS}\s*#{REG_MINS}/  
+
+  REG_TIME  = /\d{1,2}:\d{1,2}(:\d{1,2})?/
+
+  REG_DELIM = /\s*-\s*/
+
+  # Example: 09:13:46 - 10:42:39 working on stuff
+  REG_LONG  = /(?<in>#{REG_TIME})#{REG_DELIM}(?<out>#{REG_TIME})+(\s+(?<topic>.*))?/i
+
+
+  
+  def parse_entry( date, string, project: p)
+    if m = string.match(REG_LONG)
+      hash = m.named_captures.merge('project' => p)
+      require 'pry' ; binding.pry
+      Doors::Entry.new( date, hash)
+    elsif m = string.match(REG_SHORT)
+      Doors::Entry.new( date, 'duration' => string, 'project' => p)
+    else
+      fail "Wrong entry format: '#{string}'"
+    end
+  end
+
   private
-    def create_entry(info)
-      Doors::Entry.new(@date, info.merge('project' => @project))
+    def create_entry(date, info)
+      Doors::Entry.new(date, info.merge('project' => @project))
     end
 
     def to_month(val)
