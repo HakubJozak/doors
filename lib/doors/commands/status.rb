@@ -9,6 +9,8 @@ class Doors::Commands::Status
 
 
   def call
+    @cli.git.checkout!
+
     @summaries = [ @today << 1, @today ].map do |month|
       Doors::Summary.new(month)
     end
