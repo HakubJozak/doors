@@ -39,6 +39,7 @@ class Doors::Git
   end
 
   def checkout!
+    return if current_head_branch == branch
     git "checkout #{branch}"
   end
 
@@ -126,6 +127,12 @@ class Doors::Git
       end
 
       ensure_success! unless quiet
+
+      @out
+    end
+
+    def current_head_branch
+      git("rev-parse --abbrev-ref HEAD").strip
     end
 
     def ensure_success!
