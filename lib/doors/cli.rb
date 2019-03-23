@@ -47,13 +47,15 @@ class Doors::CLI
     end
 
     def help
+      cmd = File.basename($PROGRAM_NAME)
+
       <<~HELP
       Usage:
 
-        d [d]     - display summary
-        d i[n]   - (check IN) starts time tracking
-        d o[out] - (check OUT) stops time tracking
-        d s[ync] - (SYNC) synchronizes GIT repo
+        #{cmd} [d]     - display summary
+        #{cmd} i[n]   - (check IN) starts time tracking
+        #{cmd} d o[out] - (check OUT) stops time tracking
+        #{cmd} s[ync] - (SYNC) synchronizes GIT repo
 
       HELP
     end
