@@ -15,7 +15,8 @@ class Doors::Commands::History
     @project = @cli.project unless @project
     @total = 0
 
-    loader.register!(self)
+    loader.register!(total)
+    loader.register!(monthly)
     loader.load_months!(*last_year)
 
     size = 30
@@ -23,39 +24,37 @@ class Doors::Commands::History
     puts "Summary of #{project.yellow}   "
     puts "-" * 30
 
-    last_year.each do |date|
-      key   = key_from_date(date)
-      value = @entries[key] || '-'
-
-      puts " %14s | %10s" % [ key, value ]
+    monthly.each do |key,sum|
+      puts " %14s | %10s" % [ key, sum.duration ]      
     end
 
+    # last_year.each do |date|
+    #   key   = key_from_date(date)
+    #   value = @entries[key] || '-'
+
+    #   puts " %14s | %10s" % [ key, value ]
+    # end
+
     puts "-" * 30
-    puts " %14s | %10s" % [ 'TOTAL', @total ]
+    puts " %14s | %10s" % [ 'TOTAL', total ]
 
-  end
-
-  def insert(entry)
-    return unless entry.project == project
-
-    key = key_from_date(entry.date)
-    @entries[key] ||= 0
-    @entries[key] += entry.duration
-
-    @total += entry.duration
   end
 
   private
-    def key_from_date(date)
-      date.strftime("%B %Y")
-    end
-
     def loader
       @loader ||= Doors::Loader.new(@cli)
     end
 
     def last_year
       @dates ||= 12.times.map { |i| @today << i }.reverse
+    end
+
+    def total
+      @total_report ||= Doors::TotalReport.new      
+    end
+
+    def monthly
+      @month_report ||= Doors::YearReport.new
     end
 
     def option_parser

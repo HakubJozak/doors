@@ -36,8 +36,8 @@ require_relative 'doors/commands/history'
 
 
 
-require_relative 'doors/day_report'
-require_relative 'doors/month_report'
+require_relative 'doors/reports/year_report'
+require_relative 'doors/reports/month_report'
 
 
 require_relative 'doors/ascii_pen'
