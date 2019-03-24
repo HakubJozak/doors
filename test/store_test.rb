@@ -35,8 +35,8 @@ class StoreTest < Minitest::Test
       assert_equal( { 2018=>{"december"=>{"21_friday"=>[{"duration"=>"00:01:00"}]}}},
                     store.to_hash )
     end
-  end  
-    
+  end
+
 
 
 

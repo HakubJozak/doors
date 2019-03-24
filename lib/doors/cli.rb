@@ -3,8 +3,7 @@ class Doors::CLI
   include Doors::ProjectSelector
 
   def run!(argv)
-    command = create_command_object(argv.shift, argv)
-    command.call
+    parse_command(argv.shift, argv).call
   rescue Doors::Error => e
     puts e.message.red
   end
@@ -26,36 +25,39 @@ class Doors::CLI
   end
 
   private
-    def create_command_object(name, args)
-      cmd = case name
-            when nil, 'p', 'print'
-              Doors::Commands::Status.new(self)
-            when 'i', 'in', 'start'
-              Doors::Commands::Start.new(args, self)
-            when 'o', 'out', 'stop'
-              Proc.new { git.sync! if tracker.stop! }
-            when 's', 'sync'
-              Proc.new { git.inline.sync! }
-            when 'h', 'help'
-              Proc.new { puts help }
-            when 'i3'
-              Doors::Commands::I3.new(self)
-            else
-              Proc.new { help }
-            end
-
+    def parse_command(name, args)
+      case name
+      when 'i', 'in', 'start'
+        Doors::Commands::Start.new(args, self)
+      when 'o', 'out', 'stop'
+        Proc.new { git.sync! if tracker.stop! }
+      when 's', 'sync'
+        Proc.new { git.inline.sync! }
+      when /h|help/
+        Proc.new { puts help }
+      when 'i3'
+        Doors::Commands::I3.new(self)
+      when /p|print/
+        Doors::Commands::History.new(self)
+      else
+        Doors::Commands::Status.new(self)
+      end
     end
 
     def help
       <<~HELP
-      Usage:
+        Usage:
 
-        d [d]     - display summary
-        d i[n]   - (check IN) starts time tracking
-        d o[out] - (check OUT) stops time tracking
-        d s[ync] - (SYNC) synchronizes GIT repo
+          d [d]     - display summary
+          d i[n]   - (check IN) starts time tracking
+          d o[out] - (check OUT) stops time tracking
+          d s[ync] - (SYNC) synchronizes GIT repo
 
-      HELP
+        HELP
     end
 
+    def options
+      print
+    end
+    
 end

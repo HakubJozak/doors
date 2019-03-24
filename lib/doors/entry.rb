@@ -2,7 +2,7 @@ class Doors::Entry
 
   include Doors::TimeOps
 
-  attr_accessor :in, :out, :duration, :project
+  attr_accessor :in, :out, :duration, :topic, :project
 
   # TODO: refactor and merge with ^
   def initialize( date, info = {} )
@@ -52,7 +52,7 @@ class Doors::Entry
           # add 1 day
           @out += 3600 * 24
         end
-        
+
         @duration = Doors::Duration.new(total: (@out - @in).floor)
       end
     end
