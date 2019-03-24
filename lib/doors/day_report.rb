@@ -2,16 +2,21 @@ class Doors::DayReport
 
   attr_reader :total, :entries, :date
 
-  def initialize(date)
-    @date = date
-    @entries = []
-    @total = 0
+  def initialize
+    # Hash with default value
+    @days = Hash.new { |hash, key| hash[key] = {} }
   end
 
   def insert(entry)
-    return unless entry.date == @date
-    @total += entry.duration
-    @entries << entry
+    @days[entry.project][entry.date] ||= (day = Day.new)
+    day.tasks = [ day.tasks, entry.tasks ].map(&:present).compact.join(', ')
+    day.duration = (day.duration || 0) + entry.duration
   end
+
+  private
+
+  class Day < Struct.new(:tasks,:duration)
+  end    
+
 
 end

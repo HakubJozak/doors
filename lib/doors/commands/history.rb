@@ -12,12 +12,16 @@ class Doors::Commands::History
   end
 
   def call
+    @project = @cli.project unless @project
     @total = 0
+
     loader.register!(self)
     loader.load_months!(*last_year)
 
-    puts "Summary of #{project.yellow}"
-    puts "-------------------------------"
+    size = 30
+
+    puts "Summary of #{project.yellow}   "
+    puts "-" * 30
 
     last_year.each do |date|
       key   = key_from_date(date)
@@ -26,7 +30,7 @@ class Doors::Commands::History
       puts " %14s | %10s" % [ key, value ]
     end
 
-    puts "-------------------------------"
+    puts "-" * 30
     puts " %14s | %10s" % [ 'TOTAL', @total ]
 
   end

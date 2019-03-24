@@ -47,8 +47,6 @@ class Doors::CLI
         Doors::Commands::I3.new(self)
       when /p|print/
         Doors::Commands::History.new(args, self)
-      else
-        Doors::Commands::Status.new(self)
       end
     end
 
@@ -56,7 +54,6 @@ class Doors::CLI
       <<~HELP
         Usage:
 
-          d [d]     - display summary
           d i[n]    - (check IN) starts time tracking
           d o[out]  - (check OUT) stops time tracking
           d p[rint] - print history

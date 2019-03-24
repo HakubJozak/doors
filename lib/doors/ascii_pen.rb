@@ -20,5 +20,5 @@ module AsciiPen
     ".#{ '~' * (width - 2) }."
   end
 
-  
+
 end
