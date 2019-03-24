@@ -2,8 +2,14 @@ class Doors::CLI
 
   include Doors::ProjectSelector
 
-  def run!(argv)
-    parse_command(argv.shift, argv).call
+  attr_reader :command
+
+  def initialize(argv)
+    @command = parse_command(argv.shift, argv)
+  end
+
+  def call
+    @command.call
   rescue Doors::Error => e
     puts e.message.red
   end
@@ -49,9 +55,10 @@ class Doors::CLI
         Usage:
 
           d [d]     - display summary
-          d i[n]   - (check IN) starts time tracking
-          d o[out] - (check OUT) stops time tracking
-          d s[ync] - (SYNC) synchronizes GIT repo
+          d i[n]    - (check IN) starts time tracking
+          d o[out]  - (check OUT) stops time tracking
+          d p[rint] - print history
+          d s[ync]  - (SYNC) synchronizes GIT repo
 
         HELP
     end

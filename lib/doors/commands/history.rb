@@ -11,7 +11,7 @@ class Doors::Commands::History
     loader.register!(self)
     loader.load_months!(*last_year)
 
-    puts "Summary of #{project}"
+    puts "Summary of #{project.yellow}"
     puts "-------------------------------"
 
     last_year.each do |date|
@@ -21,7 +21,7 @@ class Doors::Commands::History
       puts " %14s | %10s" % [ key, value ]
     end
 
-    puts "-------------------------------"    
+    puts "-------------------------------"
     puts " %14s | %10s" % [ 'TOTAL', @total ]
 
   end

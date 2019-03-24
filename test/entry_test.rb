@@ -35,5 +35,5 @@ class EntryTest < Minitest::Test
     assert_equal 3600, e.duration.to_i
   end
 
-    
+
 end
