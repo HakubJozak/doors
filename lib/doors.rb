@@ -36,6 +36,8 @@ require_relative 'doors/commands/history'
 
 
 
+require_relative 'doors/reports/entry_sum'
+require_relative 'doors/reports/total_report'
 require_relative 'doors/reports/year_report'
 require_relative 'doors/reports/month_report'
 

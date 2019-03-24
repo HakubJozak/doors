@@ -4,22 +4,15 @@ class Doors::MonthReport
 
   def initialize
     # Hash with default value
-    @days = Hash.new { |hash, key| hash[key] = {} }
+    @days = Hash.new { |hash, key| hash[key] = EntrySum.new }
+  end
+
+  def each(&block)
+    @days.each(&block)
   end
 
   def insert(entry)
-    @days[entry.project][entry.date] ||= (day = Day.new)
-    day.tasks.append(entry.task).uniq!
-    day.duration = day.duration + entry.duration
+    @days[entry.date].add(entry)
   end
-
-  private
-    class Day < Struct.new(:tasks,:duration)
-      def initialize
-        super
-        @tasks = []
-        @duration = 0
-      end
-    end    
 
 end

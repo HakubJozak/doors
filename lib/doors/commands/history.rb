@@ -26,6 +26,12 @@ class Doors::Commands::History
 
     monthly.each do |key,sum|
       puts " %14s | %10s" % [ key, sum.duration ]      
+      sum.report.each do |day, report|
+        date = day.strftime("%d %A")
+
+        puts " %14s | %10s | %10s" % [ '', date, report.duration ]
+      end
+
     end
 
     # last_year.each do |date|
