@@ -1,9 +1,14 @@
+require 'optparse'
+
 class Doors::Commands::History
 
-  def initialize(cli, today = Date.today)
+  attr_reader :project
+
+  def initialize(argv, cli, today = Date.today)
     @cli = cli
     @today = today
     @entries = {}
+    option_parser.parse(argv)
   end
 
   def call
@@ -41,16 +46,24 @@ class Doors::Commands::History
       date.strftime("%B %Y")
     end
 
-    def project
-      'inex'
-    end
-
     def loader
       @loader ||= Doors::Loader.new(@cli)
     end
 
     def last_year
       @dates ||= 12.times.map { |i| @today << i }.reverse
+    end
+
+    def option_parser
+      OptionParser.new do |p|
+        p.on '-v', '--verbose', 'More verbose summary' do
+          @verbose = true
+        end
+
+        p.on '-p NAME', '--project NAME', String,'Project name' do |p|
+          @project = p
+        end    
+      end
     end
 
 end

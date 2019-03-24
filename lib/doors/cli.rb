@@ -1,3 +1,5 @@
+require 'optparse'
+
 class Doors::CLI
 
   include Doors::ProjectSelector
@@ -44,7 +46,7 @@ class Doors::CLI
       when 'i3'
         Doors::Commands::I3.new(self)
       when /p|print/
-        Doors::Commands::History.new(self)
+        Doors::Commands::History.new(args, self)
       else
         Doors::Commands::Status.new(self)
       end
