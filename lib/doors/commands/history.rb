@@ -28,9 +28,11 @@ class Doors::Commands::History
       sum.report.each.with_index do |val, i|
         date, report = val
         number = ('%02d' % date.day).yellow
-        n = date.strftime("%A")        
+        day_name = date.strftime("%A")        
         title = key if i == 0
-        puts " %14s | %2s %-10s | %-10s" % [ title, number, n, report.duration ]
+
+        puts " %14s | %2s %-10s | %-10s" %
+             [ title, number, day_name, report.duration ]
       end
 
       puts " %14s | %13s | %-12s" % [ 'Total', nil, sum.duration.to_s.red ]      
