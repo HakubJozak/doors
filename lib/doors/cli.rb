@@ -45,7 +45,7 @@ class Doors::CLI
         Proc.new { puts help }
       when 'i3'
         Doors::Commands::I3.new(self)
-      when /p|print/
+      else # when /p|print/
         Doors::Commands::History.new(args, self)
       end
     end

@@ -19,31 +19,25 @@ class Doors::Commands::History
     loader.register!(monthly)
     loader.load_months!(*last_year)
 
-    size = 30
+    size = 50
 
     puts "Summary of #{project.yellow}   "
-    puts "-" * 30
 
     monthly.each do |key,sum|
-      puts " %14s | %10s" % [ key, sum.duration ]      
-      sum.report.each do |day, report|
-        date = day.strftime("%d %A")
-
-        puts " %14s | %10s | %10s" % [ '', date, report.duration ]
+      puts "-" * size
+      sum.report.each.with_index do |val, i|
+        date, report = val
+        number = ('%02d' % date.day).yellow
+        n = date.strftime("%A")        
+        title = key if i == 0
+        puts " %14s | %2s %-10s | %-10s" % [ title, number, n, report.duration ]
       end
 
+      puts " %14s | %13s | %-12s" % [ 'Total', nil, sum.duration.to_s.red ]      
     end
 
-    # last_year.each do |date|
-    #   key   = key_from_date(date)
-    #   value = @entries[key] || '-'
-
-    #   puts " %14s | %10s" % [ key, value ]
-    # end
-
-    puts "-" * 30
-    puts " %14s | %10s" % [ 'TOTAL', total ]
-
+    puts "-" * size
+    puts " %14s | %13s %12s" % [ 'TOTAL', nil, total ]
   end
 
   private
