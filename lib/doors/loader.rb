@@ -1,14 +1,22 @@
 class Doors::Loader
 
-  def initialize(cli)
+  def initialize(cli, project: :all)
     @cli = cli
     @root = cli.config.root
     @listeners = []
+    @filters   = []
+    @projects = if project == :all
+                  Dir["#{@root}/*"].map { |f|
+                    File.basename(f) if File.directory?(f)
+                  }.compact.freeze
+                else
+                  @project   = [ project ]
+                end
   end
 
   def load_months!(*months)
     @entries = months.map do |month|
-      entries = projects.map do |project|
+      entries = @projects.map do |project|
         file = path_for(project, month)
         parser.load(file, project)
       end.flatten
@@ -17,11 +25,20 @@ class Doors::Loader
     end.flatten.compact
   end
 
-  def register!(*listeners)
+  def add_listeners(*listeners)
     @listeners << listeners
     @listeners.flatten!
     self
   end
+
+  def add_filters(*filters)
+    @filters << filters
+    @filters.flatten!
+    self
+  end  
+
+  alias :add_listener :add_listeners
+  alias :add_filter   :add_filters
 
   private
     # Example:
@@ -33,17 +50,12 @@ class Doors::Loader
     end
 
     def notify_listeners!(entries)
-      @listeners.each do |l|
-        entries.each do |e|
+      entries.each do |e|
+        # debug e.inspect
+        @listeners.each do |l|
           l.insert(e)
         end
       end
-    end
-
-    def projects
-      @projects ||= Dir["#{@root}/*"].map { |f|
-        File.basename(f) if File.directory?(f)
-      }.compact.freeze
     end
 
     def parser

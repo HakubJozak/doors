@@ -19,9 +19,8 @@ class Doors::Commands::Log
   private
     def loader
       @loader ||= begin
-                    l = Doors::Loader.new(@cli)
-                    l.register!(total)
-                    l.register!(monthly)                    
+                    l = Doors::Loader.new(@cli, project: project)
+                    l.add_listeners total, monthly
                   end
     end
 
@@ -41,16 +40,38 @@ class Doors::Commands::Log
       @month_report ||= Doors::YearReport.new
     end
 
+    def date_filter
+      Proc.new { |entry|  true }      
+    end
+
     def option_parser
       OptionParser.new do |p|
-        p.on '-v', '--verbose', 'More verbose summary' do
-          @verbose = true
+        # p.on '-v', '--verbose', 'More verbose summary' do
+        #   @verbose = true
+        # end
+
+        p.on '-t TAG', '--tags TAG', String,
+             'Only entries with task containing [TAG] will be listed.' do
+          # TODO
+          # loaders.add_filter
+        end        
+
+        p.on '-p PROJECT', '--project PROJECT', String,
+             'Limit entries to PROJECT' do |p|
+          debug "Using project #{p}"
+          @project = p
         end
 
-        p.on '-p NAME', '--project NAME', String,'Project name' do |p|
-          @project = p
-        end    
+        p.on '-i INTERVAL', '--interval INTERVAL', String,'Date interval' do |int|
+          debug "Using interval #{int}"
+
+          # loader.add_filter
+        end            
       end
+    end
+
+    def debug(msg)
+      $stderr.puts(msg.gray)
     end
 
 end
