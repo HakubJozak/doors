@@ -18,7 +18,7 @@ require_relative 'doors/project_selector'
 require_relative 'doors/tracker'
 require_relative 'doors/parser'
 
-# require_relative 'doors/entries_filter'
+require_relative 'doors/date_filter'
 require_relative 'doors/cli'
 require_relative 'doors/store'
 require_relative 'doors/git'
@@ -39,8 +39,3 @@ require_relative 'doors/reports/total_report'
 require_relative 'doors/reports/year_report'
 require_relative 'doors/reports/month_report'
 
-
-require_relative 'doors/ascii_pen'
-# require_relative 'doors/summary_table'
-# require_relative 'doors/recent_table'
-require_relative 'doors/project_set'
