@@ -28,13 +28,11 @@ require_relative 'doors/loader'
 require_relative 'doors/commands/print'
 require_relative 'doors/commands/start'
 require_relative 'doors/commands/i3'
-require_relative 'doors/commands/history'
+require_relative 'doors/commands/log'
 
-# require_relative 'doors/formatters/day'
+require_relative 'doors/formatters/log_formatter'
 # require_relative 'doors/summary'
 # require_relative 'doors/day_summary'
-
-
 
 require_relative 'doors/reports/entry_sum'
 require_relative 'doors/reports/total_report'

@@ -45,8 +45,8 @@ class Doors::CLI
         Proc.new { puts help }
       when 'i3'
         Doors::Commands::I3.new(self)
-      else # when /p|print/
-        Doors::Commands::History.new(args, self)
+      else # when /l|log/
+        Doors::Commands::Log.new(args, self)
       end
     end
 
@@ -56,14 +56,10 @@ class Doors::CLI
 
           d i[n]    - (check IN) starts time tracking
           d o[out]  - (check OUT) stops time tracking
-          d p[rint] - print history
           d s[ync]  - (SYNC) synchronizes GIT repo
+          d l[og]   - show log
 
         HELP
-    end
-
-    def options
-      print
     end
     
 end
