@@ -5,9 +5,13 @@ class Doors::Formatters::LogFormatter
   def initialize(report, total, dates: nil)
     @report = report
     @total  = total
+    @dates  = dates
   end
 
   def call
+    puts @dates.to_s
+    line
+    
     @report.each do |key,sum|
       line
 

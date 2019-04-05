@@ -12,7 +12,7 @@ class Doors::DateFilterTest < Minitest::Test
     assert_equal 31, filter.duration_in_days
     assert_equal "2018-10-01 - 2018-10-31, 31 days", filter.to_s
 
-    assert_equal filter.months, [ Doors::DateFilter::Month.new(2018,10) ]
+    assert_equal filter.months, [ Date.new(2018,10,1) ]
   end
 
   def test_last_month

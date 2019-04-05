@@ -33,14 +33,11 @@ class Doors::DateFilter
     months = []
     
     begin
-      months << Month.new(since.year, since.month)
+      months << since
       since = since.next_month
     end while (since < till)
 
     months
-  end
-
-  class Month < Struct.new(:year, :month)
   end
 
 end

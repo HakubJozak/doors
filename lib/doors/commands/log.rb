@@ -2,6 +2,8 @@ require 'optparse'
 
 class Doors::Commands::Log
 
+  include Doors::Logging
+
   attr_reader :project
 
   def initialize(argv, cli, today = Date.today)
@@ -33,12 +35,12 @@ class Doors::Commands::Log
       @total_report ||= Doors::TotalReport.new
     end
 
-    def monthly
-      @month_report ||= Doors::YearReport.new
+    def date_filter
+      @date_filter ||= Doors::DateFilter.new('')
     end
 
-    def date_filter
-      Proc.new { |entry|  true }
+    def monthly
+      @month_report ||= Doors::YearReport.new
     end
 
     def option_parser
@@ -59,16 +61,12 @@ class Doors::Commands::Log
           @project = p
         end
 
-        p.on '-i INTERVAL', '--interval INTERVAL', String,'Date interval' do |int|
-          debug "Using interval #{int}"
-
+        p.on '-i INTERVAL', '--interval INTERVAL', String,'Date interval' do |interval|
+          debug "Using interval #{interval}"
+          @date_filter = Doors::DateFilter.new(interval)
           # loader.add_filter
         end
       end
-    end
-
-    def debug(msg)
-      $stderr.puts(msg.gray)
     end
 
 end

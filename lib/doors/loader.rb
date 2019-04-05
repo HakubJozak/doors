@@ -1,10 +1,14 @@
 class Doors::Loader
 
+  include Doors::Logging
+
   def initialize(cli, project: :all)
     @cli = cli
     @root = cli.config.root
     @listeners = []
     @filters   = []
+    project = :all if project.blank?
+
     @projects = if project == :all
                   Dir["#{@root}/*"].map { |f|
                     File.basename(f) if File.directory?(f)
@@ -18,6 +22,7 @@ class Doors::Loader
     @entries = months.map do |month|
       entries = @projects.map do |project|
         file = path_for(project, month)
+        debug "Loading #{file} in #{project}"
         parser.load(file, project)
       end.flatten
 

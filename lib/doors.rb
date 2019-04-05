@@ -11,6 +11,7 @@ end
 
 require_relative '../core_ext/date'
 
+require_relative 'doors/logging'
 require_relative 'doors/config'
 require_relative 'doors/duration'
 require_relative 'doors/time_ops'
