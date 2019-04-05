@@ -6,13 +6,19 @@ class Doors::DateFilter
     today  = now.to_date
 
     case cli_option
-    when /-(\d)+(m|month|months)?/
-      @from = today.prev_month($1.to_i).beginning_of_month
-      @to = @from.end_of_month
+    when /^(\d{4})\z/
+      require 'pry' ; binding.pry
+      year = $1.to_i
+      @from = Date.new(year,1,1)
+      @to = Date.new(year,31,12)
     else
-      @from = today.beginning_of_month
-      @to = today.end_of_month
+      @from = Date.parse(cli_option).beginning_of_month
+      @to = @from.end_of_month
     end
+  rescue ArgumentError
+    retry unless $!.message == 'invalid date'
+    @from = today.beginning_of_month
+    @to = today.end_of_month
   end
 
   def duration_in_days

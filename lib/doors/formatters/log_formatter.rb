@@ -26,7 +26,7 @@ class Doors::Formatters::LogFormatter
              [ title, number, day_name, report.duration ]
       end
 
-      puts " %14s | %13s | %-12s" % [ 'Total', nil, sum.duration.to_s.red ]
+      puts " %14s | %13s | %-12s" % [ 'Total', nil, sum.duration.to_s.blue ]
     end
 
     line

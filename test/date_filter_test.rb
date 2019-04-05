@@ -16,9 +16,17 @@ class Doors::DateFilterTest < Minitest::Test
   end
 
   def test_last_month
-    filter = Doors::DateFilter.new('-1', now = @now)
+    filter = Doors::DateFilter.new('september', now = @now)
+    assert_equal "2019-09-01 - 2019-09-30, 30 days", filter.to_s
     assert_equal 30, filter.duration_in_days
-    assert_equal "2018-09-01 - 2018-09-30, 30 days", filter.to_s
   end
+
+  def test_last_month
+    filter = Doors::DateFilter.new('september', now = @now)
+
+    year = Date.today.year
+    assert_equal "#{year}-09-01 - #{year}-09-30, 30 days", filter.to_s
+    assert_equal 30, filter.duration_in_days
+  end  
 end
 
