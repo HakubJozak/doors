@@ -35,7 +35,7 @@ class Doors::Loader
     @filters << filters
     @filters.flatten!
     self
-  end  
+  end
 
   alias :add_listener :add_listeners
   alias :add_filter   :add_filters

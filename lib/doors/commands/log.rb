@@ -12,7 +12,7 @@ class Doors::Commands::Log
   end
 
   def call
-    loader.load_months!(*last_year)
+    loader.load_months!(*date_filter.months)
     puts formatter.()
   end
 
@@ -25,15 +25,12 @@ class Doors::Commands::Log
     end
 
     def formatter
-      @formatter = Doors::Formatters::LogFormatter.new(monthly, total)
-    end
-
-    def last_year
-      @dates ||= 12.times.map { |i| @today << i }.reverse
+      @formatter = Doors::Formatters::LogFormatter.
+                     new(monthly, total, dates: date_filter)
     end
 
     def total
-      @total_report ||= Doors::TotalReport.new      
+      @total_report ||= Doors::TotalReport.new
     end
 
     def monthly
@@ -41,7 +38,7 @@ class Doors::Commands::Log
     end
 
     def date_filter
-      Proc.new { |entry|  true }      
+      Proc.new { |entry|  true }
     end
 
     def option_parser
@@ -54,7 +51,7 @@ class Doors::Commands::Log
              'Only entries with task containing [TAG] will be listed.' do
           # TODO
           # loaders.add_filter
-        end        
+        end
 
         p.on '-p PROJECT', '--project PROJECT', String,
              'Limit entries to PROJECT' do |p|
@@ -66,7 +63,7 @@ class Doors::Commands::Log
           debug "Using interval #{int}"
 
           # loader.add_filter
-        end            
+        end
       end
     end
 

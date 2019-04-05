@@ -61,5 +61,5 @@ class Doors::CLI
 
         HELP
     end
-    
+
 end

@@ -9,6 +9,8 @@ module Doors
 end
 
 
+require_relative '../core_ext/date'
+
 require_relative 'doors/config'
 require_relative 'doors/duration'
 require_relative 'doors/time_ops'
@@ -38,4 +40,3 @@ require_relative 'doors/reports/entry_sum'
 require_relative 'doors/reports/total_report'
 require_relative 'doors/reports/year_report'
 require_relative 'doors/reports/month_report'
-
