@@ -27,6 +27,12 @@ class Doors::DateFilterTest < Minitest::Test
     year = Date.today.year
     assert_equal "#{year}-09-01 - #{year}-09-30, 30 days", filter.to_s
     assert_equal 30, filter.duration_in_days
-  end  
-end
+  end
 
+  def test_year
+    filter = Doors::DateFilter.new('2017', now = @now)
+    assert_equal "2017-01-01 - 2017-12-31, 365 days", filter.to_s
+    assert_equal 365, filter.duration_in_days
+  end  
+
+end

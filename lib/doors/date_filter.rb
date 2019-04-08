@@ -7,14 +7,15 @@ class Doors::DateFilter
 
     case cli_option
     when /^(\d{4})\z/
-      require 'pry' ; binding.pry
       year = $1.to_i
       @from = Date.new(year,1,1)
-      @to = Date.new(year,31,12)
+      @to = Date.new(year,12,31)
     else
       @from = Date.parse(cli_option).beginning_of_month
       @to = @from.end_of_month
     end
+
+
   rescue ArgumentError
     retry unless $!.message == 'invalid date'
     @from = today.beginning_of_month
@@ -32,12 +33,12 @@ class Doors::DateFilter
   # def last_year
   #   @dates ||= 12.times.map { |i| @today << i }.reverse
   # end
-  
+
   def months
     since = @from.beginning_of_month
     till  = @to.beginning_of_month
     months = []
-    
+
     begin
       months << since
       since = since.next_month
