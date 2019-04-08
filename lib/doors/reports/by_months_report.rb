@@ -1,7 +1,11 @@
-class Doors::YearReport
+class Doors::ByMonthsReport
 
-  def initialize
+  attr_reader :name
+
+  def initialize(name:, &block)
     @months = Hash.new { |hash, key| hash[key] = Month.new }
+    @name   = name
+    @filter = block if block_given?
   end
 
   def each(&block)
@@ -9,6 +13,7 @@ class Doors::YearReport
   end
 
   def insert(entry)
+    return unless passes_filter?(entry)
     key = key_for_entry(entry)
     @months[key].add(entry)
     @months[key].report.insert(entry)
@@ -19,12 +24,17 @@ class Doors::YearReport
       entry.date.strftime("%B %Y")
     end
 
+    def passes_filter?(entry)
+      return true unless @filter
+      @filter.call(entry)
+    end
+
     class Month < EntrySum
       attr_reader :report
 
       def initialize
         super
-        @report = Doors::MonthReport.new
+        @report = Doors::ByDaysReport.new
       end
     end
 

@@ -42,7 +42,7 @@ class Doors::DateFilter
     begin
       months << since
       since = since.next_month
-    end while (since < till)
+    end while (since <= till)
 
     months
   end

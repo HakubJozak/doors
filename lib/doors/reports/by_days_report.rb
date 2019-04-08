@@ -1,4 +1,4 @@
-class Doors::MonthReport
+class Doors::ByDaysReport
 
   attr_reader :total, :entries, :date
 

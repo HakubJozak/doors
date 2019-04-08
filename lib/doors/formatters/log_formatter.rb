@@ -2,7 +2,7 @@ require 'date'
 
 class Doors::Formatters::LogFormatter
 
-  def initialize(report, total, dates: nil)
+  def initialize(report, total, dates: nil, &block)
     @report = report
     @total  = total
     @dates  = dates
@@ -11,19 +11,23 @@ class Doors::Formatters::LogFormatter
   def call
     puts @dates.to_s
     line
-    
-    @report.each do |key,sum|
-      line
+
+    @report.each do |month_name,sum|
+
+      report_title = @report.name.center(8).blue
+      
+      puts " %s | %13s | %-10s" %
+           [ month_name.rjust(14), nil, report_title ]
 
       sum.report.each.with_index do |val, i|
         date, report = val
         number = ('%02d' % date.day).yellow
+
         day_name = date.strftime("%10A").ljust(10)
         day_name = day_name.yellow if day_name.strip == 'Monday'
-        title = key if i == 0
 
         puts " %14s | %2s %s | %-10s" %
-             [ title, number, day_name, report.duration ]
+             [ nil, number, day_name, report.duration ]
       end
 
       puts " %14s | %13s | %-12s" % [ 'Total', nil, sum.duration.to_s.blue ]

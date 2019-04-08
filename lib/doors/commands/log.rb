@@ -15,7 +15,7 @@ class Doors::Commands::Log
 
   def call
     loader.load_months!(*date_filter.months)
-    puts formatter.()
+    formatter.()
   end
 
   private
@@ -40,7 +40,13 @@ class Doors::Commands::Log
     end
 
     def monthly
-      @month_report ||= Doors::YearReport.new
+      @month_report ||= if @project.present?      
+                          Doors::ByMonthsReport.new(name: @project) do |e|
+	                    e.project.downcase.strip == @project.downcase.strip
+                          end                          
+                        else
+                          Doors::ByMonthsReport.new(name: 'ALL')
+                        end
     end
 
     def option_parser

@@ -39,5 +39,5 @@ require_relative 'doors/formatters/log_formatter'
 
 require_relative 'doors/reports/entry_sum'
 require_relative 'doors/reports/total_report'
-require_relative 'doors/reports/year_report'
-require_relative 'doors/reports/month_report'
+require_relative 'doors/reports/by_days_report'
+require_relative 'doors/reports/by_months_report'
