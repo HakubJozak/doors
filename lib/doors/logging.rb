@@ -4,13 +4,13 @@ module Doors::Logging
 
   private
     def info(msg)
-      if $log_level.to_i >= LEVELS.index(:info)
+      if LEVELS.index($log_level).to_i > 0
         logging_stream.puts "%7s - %s" % [ 'INFO', msg.green ]
       end
     end
 
     def debug(msg)
-      if $log_level.to_i >= LEVELS.index(:debug)
+      if LEVELS.index($log_level).to_i > 1
         logging_stream.puts "%7s - %s" % [ 'DEBUG', msg.blue ]
       end
     end

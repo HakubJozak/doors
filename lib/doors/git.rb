@@ -43,7 +43,7 @@ class Doors::Git
     git "checkout #{branch}"
   end
 
-  def sync!
+  def sync!(message = 'sync')
     info 'Syncing GIT'
 
     ensure_ssh_authenticated!
@@ -51,7 +51,7 @@ class Doors::Git
     detach {
       git "fetch"
       checkout!
-      commit_all
+      commit_all(message)
       git "merge origin/#{branch}"
       push
     }
@@ -82,11 +82,11 @@ class Doors::Git
       end
     end
 
-    def commit_all
+    def commit_all(message)
       git "add ."
 
-      msg = "#{`hostname`.strip}-#{DateTime.now.rfc3339}"
-      git "commit -m '#{msg}'", quiet: true
+      message = "#{`hostname`.strip}: #{message}"
+      git "commit -m '#{message}'", quiet: true
 
       unless @out =~ /nothing.to.commit/
         ensure_success!

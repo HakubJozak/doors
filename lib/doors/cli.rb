@@ -38,7 +38,7 @@ class Doors::CLI
       when 'i', 'in', 'start'
         Doors::Commands::Start.new(args, self)
       when 'o', 'out', 'stop'
-        Proc.new { git.sync! if tracker.stop! }
+        Proc.new { git.sync!('OUT') if tracker.stop! }
       when 's', 'sync'
         Proc.new { git.inline.sync! }
       when /h|help/

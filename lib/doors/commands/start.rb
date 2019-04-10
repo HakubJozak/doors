@@ -8,7 +8,7 @@ class Doors::Commands::Start
   def call
     @cli.project = @project_name
     @cli.tracker.start!
-    @cli.git.sync!
+    @cli.git.sync!("IN #{@cli.project}")
   end
 
 end
