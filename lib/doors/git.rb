@@ -4,6 +4,8 @@ require 'date'
 # FIXME: use lock file and wait for other GIT operations to finish?
 class Doors::Git
 
+  include Doors::Logging
+
   class Error < ::Doors::Error ; end
 
   class NoSSHKey < Error ; end
@@ -25,9 +27,7 @@ class Doors::Git
   end
 
   def inline
-    tap {
-      @inline = true
-    }
+    tap {  @inline = true  }
   end
 
   def branch
@@ -45,6 +45,7 @@ class Doors::Git
 
   def sync!
     info 'Syncing GIT'
+
     ensure_ssh_authenticated!
 
     detach {
@@ -71,10 +72,6 @@ class Doors::Git
   end
 
   private
-    def info(msg)
-      tag = '[detached]' unless @inline
-      puts [ tag, msg ].compact.join(' ')
-    end
 
     # TODO: add --no-detach parameter to CLI
     def detach(&block)
@@ -122,9 +119,7 @@ class Doors::Git
       @out, @err, @status = Open3.capture3(shell)
 
       # TODO: logger
-      if @inline
-        puts shell
-      end
+      debug shell
 
       ensure_success! unless quiet
 
