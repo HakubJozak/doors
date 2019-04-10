@@ -8,18 +8,23 @@ class Doors::Commands::TodayInfo
   end
 
   def call
+    puts
+
     loader.load_months!(@today.beginning_of_month)
 
     @entries.sort.each do |entry|
       from = entry.in&.strftime('%H:%M')
       to   = entry.out&.strftime('%H:%M') || 'NOW'
+      state = 'RUNNING' if entry.running?
 
-      line = " %5s | %5s - %5s | %-10s" %
-             [  entry.project, from, to, entry.duration]
+      line = " %5s | %5s - %5s | %-8s | %6s" %
+             [  entry.project, from, to, entry.duration, state]
       line = line.blue if entry.running?
 
       puts line
     end
+
+    puts
   end
 
   def entry_allowed?(entry)
