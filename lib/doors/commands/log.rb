@@ -9,7 +9,6 @@ class Doors::Commands::Log
   def initialize(argv, cli, today = Date.today)
     @cli = cli
     @today = today
-    @entries = {}
     option_parser.parse(argv)
   end
 
@@ -40,10 +39,10 @@ class Doors::Commands::Log
     end
 
     def monthly
-      @month_report ||= if @project.present?      
+      @month_report ||= if @project.present?
                           Doors::ByMonthsReport.new(name: @project) do |e|
 	                    e.project.downcase.strip == @project.downcase.strip
-                          end                          
+                          end
                         else
                           Doors::ByMonthsReport.new(name: 'ALL')
                         end

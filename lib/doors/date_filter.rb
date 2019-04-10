@@ -25,6 +25,10 @@ class Doors::DateFilter
     pick_last_month
   end
 
+  def entry_allowed?(entry)
+    
+  end
+
   def duration_in_days
     (@to - @from).to_i + 1
   end

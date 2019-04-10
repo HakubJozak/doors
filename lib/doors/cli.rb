@@ -46,7 +46,7 @@ class Doors::CLI
       when 'i3'
         Doors::Commands::I3.new(self)
       else # when /l|log/
-        Doors::Commands::Log.new(args, self)
+        Doors::Commands::TodayInfo.new(args, self)
       end
     rescue OptionParser::MissingArgument => e
       print_error_and_exit e.message

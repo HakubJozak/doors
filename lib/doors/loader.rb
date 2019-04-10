@@ -5,8 +5,8 @@ class Doors::Loader
   def initialize(cli, project: :all)
     @cli = cli
     @root = cli.config.root
-    @listeners = []
-    @filters   = []
+    @listeners = Listeners.new
+    @filters   = Filters.new
     project = :all if project.blank?
 
     @projects = if project == :all
@@ -26,7 +26,15 @@ class Doors::Loader
         parser.load(file, project)
       end.flatten
 
-      notify_listeners!(entries)
+      entries.each do |entry|
+        if @filters.entry_allowed?(entry)
+          debug "Loaded #{entry.inspect}"
+          @listeners.entry_loaded(entry)
+        else
+          debug "Filtered #{entry.inspect}"
+        end
+      end
+
     end.flatten.compact
   end
 
@@ -56,15 +64,25 @@ class Doors::Loader
 
     def notify_listeners!(entries)
       entries.each do |e|
-        # debug e.inspect
-        @listeners.each do |l|
-          l.insert(e)
-        end
+        @listeners.notify_all!(e)
       end
     end
 
     def parser
       @parser ||= Doors::Parser.new
+    end
+
+    class Listeners < Array
+      def entry_loaded(entry)
+        # TODO: rename #insert to #entry_loaded
+        each { |listener| listener.insert(entry) }
+      end
+    end
+
+    class Filters < Array
+      def entry_allowed?(entry)
+        all? { |filter| filter.entry_allowed?(entry) }
+      end
     end
 
 end
