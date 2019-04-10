@@ -22,7 +22,7 @@ class Doors::Loader
     @entries = months.map do |month|
       entries = @projects.map do |project|
         file = path_for(project, month)
-        debug "Loading #{file} in #{project}"
+        info "Loading #{file} in #{project}"
         parser.load(file, project)
       end.flatten
 
