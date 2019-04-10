@@ -3,23 +3,26 @@ require 'date'
 class Doors::DateFilter
 
   def initialize(cli_option, now = Time.now)
-    today  = now.to_date
+    @today  = now.to_date
 
     case cli_option
     when /^(\d{4})\z/
       year = $1.to_i
       @from = Date.new(year,1,1)
       @to = Date.new(year,12,31)
+      @title = year.to_s
+    when '',nil
+      pick_last_month
+      @title = @today.strftime('%B %Y')
     else
       @from = Date.parse(cli_option).beginning_of_month
       @to = @from.end_of_month
+      @title = @from.strftime('%B %Y')
     end
-
 
   rescue ArgumentError
     retry unless $!.message == 'invalid date'
-    @from = today.beginning_of_month
-    @to = today.end_of_month
+    pick_last_month
   end
 
   def duration_in_days
@@ -27,7 +30,8 @@ class Doors::DateFilter
   end
 
   def to_s
-    "#{@from} - #{@to}, #{duration_in_days} days"
+    @title ||
+      "#{@from} - #{@to}, #{duration_in_days} days"
   end
 
   # def last_year
@@ -46,5 +50,13 @@ class Doors::DateFilter
 
     months
   end
+
+  private
+    def pick_last_month
+        @from = @today.beginning_of_month
+        @to = @today.end_of_month
+    end
+
+  
 
 end
