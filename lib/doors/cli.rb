@@ -13,7 +13,7 @@ class Doors::CLI
   def call
     @command.call
   rescue Doors::Error => e
-    puts e.message.red
+    print_error_and_exit(e.message)
   end
 
   def config
@@ -48,6 +48,8 @@ class Doors::CLI
       else # when /l|log/
         Doors::Commands::Log.new(args, self)
       end
+    rescue OptionParser::MissingArgument => e
+      print_error_and_exit e.message
     end
 
     def help
@@ -61,5 +63,11 @@ class Doors::CLI
 
         HELP
     end
+
+    def print_error_and_exit(msg)
+      puts msg.red
+      exit 1
+    end
+
 
 end
