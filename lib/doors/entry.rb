@@ -1,6 +1,7 @@
 class Doors::Entry
 
   include Doors::TimeOps
+  include Comparable
 
   attr_accessor :in, :out, :duration, :task, :project
 
@@ -35,6 +36,14 @@ class Doors::Entry
 
   def date
     Date.new(*@date)
+  end
+
+  def running?
+    false
+  end
+
+  def <=>(other)
+    @in.to_time <=> other.in.to_time
   end
 
   private

@@ -4,22 +4,28 @@ class Doors::Commands::TodayInfo
     @cli = cli
     @today = today
     @report = Doors::ByDaysReport.new
-    @entries = []
+    @entries = [ cli.tracker.running_entry ].compact
   end
 
   def call
     loader.load_months!(@today.beginning_of_month)
-    @entries.each do |entry|
-      puts " %5s | %2s - %2s | %-10s" %
-           [  entry.project, entry.in, entry.out, entry.duration]
-      
+
+    @entries.sort.each do |entry|
+      from = entry.in&.strftime('%H:%M')
+      to   = entry.out&.strftime('%H:%M') || 'NOW'
+
+      line = " %5s | %5s - %5s | %-10s" %
+             [  entry.project, from, to, entry.duration]
+      line = line.blue if entry.running?
+
+      puts line
     end
   end
 
   def entry_allowed?(entry)
     @today == entry.date.to_date
   end
-  
+
   def insert(entry)
     @entries << entry
   end
@@ -31,8 +37,8 @@ class Doors::Commands::TodayInfo
                     l = Doors::Loader.new(@cli)
                     l.add_filter self
                     l.add_listeners @report
-                    l.add_listeners self                    
+                    l.add_listeners self
                   end
     end
-  
+
 end

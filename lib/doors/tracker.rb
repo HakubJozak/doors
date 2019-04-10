@@ -43,11 +43,39 @@ class Doors::Tracker
     end
   end
 
+  def running_entry
+    return nil unless running?
+    RunningEntry.new(started, @cli.project)
+  end
+
   def running?
     File.exist?(@path)
   end
 
   private
+    class RunningEntry
+      attr_reader :in, :out, :project
+
+      def initialize(started, project)
+        @in = started.to_time
+        @out = Time.now
+        @project = project
+      end
+
+      def <=>(other)
+        @in.to_time <=> other.in.to_time
+      end      
+
+      def duration
+        secs = @out.to_time - @in.to_time 
+        Doors::Duration.new(total: secs)
+      end
+
+      def running?
+        true
+      end
+    end
+
     def started
       @started ||= DateTime.parse File.read(@path)
     end
