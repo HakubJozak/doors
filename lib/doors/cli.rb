@@ -36,7 +36,10 @@ class Doors::CLI
     def parse_command(name, args)
       case name
       when 'i', 'in', 'start'
-        Doors::Commands::Start.new(args, self)
+        Proc.new {
+          Doors::Commands::Start.new(args, self).call
+          Doors::Commands::TodayInfo.new(args, self).call
+        }
       when 'o', 'out', 'stop'
         Proc.new { git.sync!('OUT') if tracker.stop! }
       when 's', 'sync'

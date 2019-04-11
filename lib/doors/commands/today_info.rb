@@ -14,12 +14,12 @@ class Doors::Commands::TodayInfo
 
     @entries.sort.each do |entry|
       from = entry.in&.strftime('%H:%M')
-      to   = entry.out&.strftime('%H:%M') || 'NOW'
-      state = 'RUNNING' if entry.running?
+      to   = entry.out&.strftime('%H:%M')
+      state = 'RUNNING'.red if entry.running?
 
-      line = " %5s | %5s - %5s | %-8s | %6s" %
-             [  entry.project, from, to, entry.duration, state]
-      line = line.blue if entry.running?
+      line = " %s | %5s - %5s | %-8s | %6s" %
+             [  entry.project.rjust(5).blue, from, to, entry.duration, state]
+      line = line.green
 
       puts line
     end
