@@ -48,6 +48,8 @@ class Doors::CLI
         Proc.new { puts help }
       when 'i3'
         Doors::Commands::I3.new(self)
+      when /e|edit/
+        Doors::Commands::Edit.new(self)        
       else # when /l|log/
         Doors::Commands::TodayInfo.new(args, self)
       end
@@ -59,10 +61,11 @@ class Doors::CLI
       <<~HELP
         Usage:
 
-          d i[n]    - (check IN) starts time tracking
-          d o[out]  - (check OUT) stops time tracking
-          d s[ync]  - (SYNC) synchronizes GIT repo
-          d l[og]   - show log
+          t i[n]    - (check IN) starts time tracking
+          t o[out]  - (check OUT) stops time tracking
+          t s[ync]  - (SYNC) synchronizes GIT repo
+          t l[og]   - show log
+          t e[dit]  - edit current time sheet 
 
         HELP
     end

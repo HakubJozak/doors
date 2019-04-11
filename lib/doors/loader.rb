@@ -1,6 +1,9 @@
+require_relative './path_helper'
+
 class Doors::Loader
 
   include Doors::Logging
+  include Doors::PathHelper
 
   def initialize(cli, project: :all)
     @cli = cli
@@ -54,14 +57,6 @@ class Doors::Loader
   alias :add_filter   :add_filters
 
   private
-    # Example:
-    #
-    #  ~/time/kdm/october_2018.yml
-    #
-    def path_for(project, d = Date.today)
-      month = d.strftime("#{@root}/#{project}/%Y_%B.yml").downcase
-    end
-
     def notify_listeners!(entries)
       entries.each do |e|
         @listeners.notify_all!(e)

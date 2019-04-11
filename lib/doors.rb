@@ -31,6 +31,7 @@ require_relative 'doors/commands/start'
 require_relative 'doors/commands/i3'
 require_relative 'doors/commands/log'
 require_relative 'doors/commands/today_info'
+require_relative 'doors/commands/edit'
 
 require_relative 'doors/formatters/log_formatter'
 # require_relative 'doors/summary'
