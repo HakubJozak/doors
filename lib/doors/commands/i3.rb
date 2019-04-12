@@ -6,14 +6,14 @@ class Doors::Commands::I3
     @cli = cli
     @today = today
     @tracker = cli.tracker
-  end  
+  end
 
   def call
     if ENV['BLOCK_BUTTON'].to_s.empty?
       if tracker.running?
-        puts "<span color='green'>IN</span>"
+        puts "<span color='#fffe55'>#{@cli.project}</span>"
       else
-        puts "<span color='red'>OUT</span>"
+        puts "<span color='gray'>OUT</span>"
       end
     else
       puts 'Click!'
@@ -27,4 +27,5 @@ class Doors::Commands::I3
 
     $stdout.flush
   end
+
 end

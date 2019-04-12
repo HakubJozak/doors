@@ -30,7 +30,7 @@ class Doors::Commands::TodayInfo
     puts ' TOTALs'.light_gray
     puts
 
-    stats.each do |project,duration|
+    totals.each do |project,duration|
       puts " %s | %6s" % [ project.rjust(5).blue, duration.to_s ]
     end
 
@@ -46,7 +46,7 @@ class Doors::Commands::TodayInfo
   end
 
   private
-    def stats
+    def totals
       projects = @entries.group_by(&:project)
       projects.each_pair.map do |project,entries|
         [ project, entries.inject(0) { |sum,e| sum + e.duration } ]
