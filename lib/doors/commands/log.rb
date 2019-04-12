@@ -14,6 +14,7 @@ class Doors::Commands::Log
 
   def call
     loader.load_months!(*date_filter.months)
+    loader.add_entry(@cli.tracker.running_entry)
     formatter.()
   end
 

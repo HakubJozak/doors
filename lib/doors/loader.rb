@@ -30,15 +30,22 @@ class Doors::Loader
       end.flatten
 
       entries.each do |entry|
-        if @filters.entry_allowed?(entry)
-          debug "Loaded #{entry.inspect}"
-          @listeners.entry_loaded(entry)
-        else
-          debug "Filtered #{entry.inspect}"
-        end
+        add_entry(entry)
       end
 
     end.flatten.compact
+  end
+
+  def add_entry(entry)
+    return unless entry
+
+    if @filters.entry_allowed?(entry)
+      debug "Loaded #{entry.inspect}"
+      @listeners.entry_loaded(entry)
+    else
+      debug "Filtered #{entry.inspect}"
+    end
+    
   end
 
   def add_listeners(*listeners)

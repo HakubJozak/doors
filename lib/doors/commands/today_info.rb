@@ -8,7 +8,8 @@ class Doors::Commands::TodayInfo
   end
 
   def call
-    puts "Today - #{@today.strftime('%A - %d %B %Y')}".red
+    puts
+    puts " TODAY - #{@today.strftime('%A - %d %B %Y')}".light_gray
     puts
 
     loader.load_months!(@today.beginning_of_month)
@@ -16,7 +17,7 @@ class Doors::Commands::TodayInfo
     @entries.sort.each do |entry|
       from = entry.in&.strftime('%H:%M')
       to   = entry.out&.strftime('%H:%M')
-      state = '[running]'.red if entry.running?
+      state = '[running]'.green if entry.running?
 
       line = " %s | %5s - %5s | %-8s | %6s" %
              [  entry.project.rjust(5).blue, from, to, entry.duration, state]
@@ -26,7 +27,8 @@ class Doors::Commands::TodayInfo
     end
 
     puts
-    puts 'Total'.red
+    puts ' TOTALs'.light_gray
+    puts
 
     stats.each do |project,duration|
       puts " %s | %6s" % [ project.rjust(5).blue, duration.to_s ]
@@ -48,7 +50,7 @@ class Doors::Commands::TodayInfo
       projects = @entries.group_by(&:project)
       projects.each_pair.map do |project,entries|
         [ project, entries.inject(0) { |sum,e| sum + e.duration } ]
-      end  
+      end
     end
 
     def loader

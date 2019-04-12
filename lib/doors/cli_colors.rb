@@ -30,7 +30,7 @@ class String
     colorize(37)
   end
 
-  def light_green
+  def light_gray
     colorize(92)
   end
 

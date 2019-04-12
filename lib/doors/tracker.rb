@@ -62,12 +62,24 @@ class Doors::Tracker
         @project = project
       end
 
+      def date
+        t = Date.today
+        # TODO - change Entry to store date as Date
+        [ t.year, t.month, t.day ]
+        t
+      end
+
+      # TODO
+      def task
+        ''
+      end
+
       def <=>(other)
         @in.to_time <=> other.in.to_time
-      end      
+      end
 
       def duration
-        secs = @out.to_time - @in.to_time 
+        secs = @out.to_time - @in.to_time
         Doors::Duration.new(total: secs)
       end
 
