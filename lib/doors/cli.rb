@@ -49,7 +49,9 @@ class Doors::CLI
       when 'i3'
         Doors::Commands::I3.new(self)
       when /e|edit/
-        Doors::Commands::Edit.new(self)        
+        Doors::Commands::Edit.new(self)
+      when /l|log/
+        Doors::Commands::Log.new(args, self)
       else # when /l|log/
         Doors::Commands::TodayInfo.new(args, self)
       end
@@ -65,7 +67,7 @@ class Doors::CLI
           t o[out]  - (check OUT) stops time tracking
           t s[ync]  - (SYNC) synchronizes GIT repo
           t l[og]   - show log
-          t e[dit]  - edit current time sheet 
+          t e[dit]  - edit current time sheet
 
         HELP
     end

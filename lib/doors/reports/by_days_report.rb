@@ -8,7 +8,7 @@ class Doors::ByDaysReport
   end
 
   def each(&block)
-    @days.each(&block)
+    @days.sort.each(&block)
   end
 
   def insert(entry)
