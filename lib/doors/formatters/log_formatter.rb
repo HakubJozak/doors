@@ -10,6 +10,7 @@ class Doors::Formatters::LogFormatter
   end
 
   def call
+    puts
     puts @dates.to_s
     line
 
@@ -36,6 +37,7 @@ class Doors::Formatters::LogFormatter
 
     line
     puts " %s | %13s   %s |" % [ 'TOTAL'.rjust(14).red, nil, @total.to_s.ljust(10).red ]
+    puts
   end
 
   private
