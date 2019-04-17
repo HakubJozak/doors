@@ -75,15 +75,17 @@ class Doors::Store
     def serialize_entry(e)
       f = '%H:%M:%S'
 
-      if e.in && e.out
-        [ e.in.strftime(f), e.out.strftime(f) ].join(' - ')
-      elsif e.out
-        { 'out' => e.out.strftime(f) }
-      elsif e.in
-        { 'in'  => e.in.strftime(f) }
-      elsif e.duration
-        { 'duration' => e.duration.to_s }
-      end
+      time = if e.in && e.out
+               [ e.in.strftime(f), e.out.strftime(f) ].join(' - ')
+             elsif e.out
+               { 'out' => e.out.strftime(f) }
+             elsif e.in
+               { 'in'  => e.in.strftime(f) }
+             elsif e.duration
+               e.duration.to_s(:short)
+             end
+
+      [ time, e.task ].compact.join(' ')
     end
 
 end

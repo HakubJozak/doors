@@ -46,9 +46,9 @@ class Doors::Formatters::LogFormatter
   private
     def info_for(date)
       if date == @today
-        'today'
+        '[today]'
       elsif date == (@today - 1)
-        'yesterday'
+        '[yesterday]'
       end
     end
 

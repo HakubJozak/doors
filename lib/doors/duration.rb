@@ -49,6 +49,8 @@ class Doors::Duration
     (@seconds - hours*3600).div 60
   end
 
+  alias :mins :minutes 
+
   def secs
     @seconds - (minutes*60 + hours*3600)
   end
@@ -57,9 +59,16 @@ class Doors::Duration
     @seconds
   end
 
-  def to_s
-    "%02d:%02d:%02d" %
-      [ hours, minutes, secs ]
+  def to_s(format = :full)
+    case format
+    when :full
+      "%02d:%02d:%02d" % [ hours, minutes, secs ]
+    when :short
+      h = "#{hours}h" if hours > 0
+      m = "#{mins}m"  if mins > 0
+      s = "#{secs}s"  if secs > 0
+      [ h, m, s ].compact.join(' ')
+    end
   end
 
 end

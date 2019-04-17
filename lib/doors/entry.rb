@@ -43,7 +43,11 @@ class Doors::Entry
   end
 
   def <=>(other)
-    @in.to_time <=> other.in.to_time
+    if @in && other.in
+      @in.to_time <=> other.in.to_time
+    else
+      0
+    end
   end
 
   private

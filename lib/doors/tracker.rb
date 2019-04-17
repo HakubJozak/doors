@@ -54,6 +54,7 @@ class Doors::Tracker
 
   private
     class RunningEntry
+
       attr_reader :in, :out, :project
 
       def initialize(started, project)
@@ -74,10 +75,6 @@ class Doors::Tracker
         ''
       end
 
-      def <=>(other)
-        @in.to_time <=> other.in.to_time
-      end
-
       def duration
         secs = @out.to_time - @in.to_time
         Doors::Duration.new(total: secs)
@@ -85,6 +82,11 @@ class Doors::Tracker
 
       def running?
         true
+      end
+
+      # running entry is always last
+      def <=>(other)
+          1
       end
     end
 

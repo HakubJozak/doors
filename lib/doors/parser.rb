@@ -46,14 +46,19 @@ class Doors::Parser
 
   REG_MINS  = /(?<minutes>\d+)m/
 
-  REG_SHORT  = /#{REG_HOURS}\s*#{REG_MINS}/
+  REG_SECS  = /(?<minutes>\d+)s/  
 
+  REG_TASK   = /(\s+(?<task>.*))/
+  
   REG_TIME  = /\d{1,2}:\d{1,2}(:\d{1,2})?/
+
+  # Example: 2h 30m working on stuff
+  REG_SHORT  = /#{REG_HOURS}?\s*#{REG_MINS}?\s*#{REG_SECS}?#{REG_TASK}?/
 
   REG_DELIM = /\s*-\s*/
 
   # Example: 09:13:46 - 10:42:39 working on stuff
-  REG_LONG  = /(?<in>#{REG_TIME})#{REG_DELIM}(?<out>#{REG_TIME})+(\s+(?<task>.*))?/i
+  REG_LONG  = /(?<in>#{REG_TIME})#{REG_DELIM}(?<out>#{REG_TIME})+#{REG_TASK}?/i
 
 
   def parse_entry( date, string, project:)
@@ -61,7 +66,11 @@ class Doors::Parser
       hash = m.named_captures.merge('project' => project)
       Doors::Entry.new( date, hash)
     elsif m = string.match(REG_SHORT)
-      Doors::Entry.new( date, 'duration' => string, 'project' => project)
+      Doors::Entry.new( date,
+                        'duration' => string,
+                        'project' => project,
+                        'task' => m[:task]
+                      )
     else
       fail "Wrong entry format: '#{string}'"
     end
