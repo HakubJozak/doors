@@ -9,8 +9,7 @@ class EntrySum
   # TODO: coerce
   def add(entry)
     self.duration += entry.duration
-    self.tasks    << entry.task    
+    self.tasks    << entry.task
   end
 
-end    
-
+end

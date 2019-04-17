@@ -27,9 +27,12 @@ class Doors::Formatters::LogFormatter
 
         day_name = date.strftime("%10A").ljust(10)
         day_name = day_name.yellow if day_name.strip == 'Monday'
+        tasks    = report.tasks.compact.join(', ')
 
-        puts " %14s | %2s %s | %-10s | %s " %
-             [ nil, number, day_name, report.duration, info_for(date)&.green ]
+
+        puts " %14s | %2s %s | %-10s | %s %s" %
+             [ nil, number, day_name, report.duration,
+               tasks, info_for(date)&.green ]
       end
 
       puts " %14s | %13s | %-12s   |" % [ 'This month', nil, sum.duration.to_s.blue ]
@@ -48,7 +51,7 @@ class Doors::Formatters::LogFormatter
         'yesterday'
       end
     end
-    
+
     def line
       puts "-" * 57
     end
