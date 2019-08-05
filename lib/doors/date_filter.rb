@@ -26,7 +26,8 @@ class Doors::DateFilter
   end
 
   def entry_allowed?(entry)
-    
+    @from <= entry.date &&
+      @to >= entry.date
   end
 
   def duration_in_days
@@ -61,6 +62,6 @@ class Doors::DateFilter
         @to = @today.end_of_month
     end
 
-  
+
 
 end
