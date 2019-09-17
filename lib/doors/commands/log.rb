@@ -17,10 +17,10 @@ class Doors::Commands::Log
 
     # add running entry
     # TODO - extract to method
-    running = @cli.tracker.running_entry
-
-    if date_filter.entry_allowed?(running)
-      loader.add_entry(running)
+    if running = @cli.tracker.running_entry
+      if date_filter.entry_allowed?(running)
+        loader.add_entry(running)
+      end
     end
     # ------------------
 
