@@ -1,6 +1,8 @@
-#!/home/jakub/.rvm/gems/ruby-2.5.3/wrappers/ruby
+#!/usr/bin/ruby
 
 require 'rubygems'
+
+ENV['BUNDLE_GEMFILE'] = "#{__dir__}/../Gemfile"
 require 'bundler/setup'
 
 require_relative '../lib/doors.rb'
