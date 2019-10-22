@@ -18,3 +18,6 @@ A simple CLI time tracking program written in Ruby.
 
 - homepage and issue tracking https://github.com/HakubJozak/doors
 - written by Jakub Hozak
+
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
